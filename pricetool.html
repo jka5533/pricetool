@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pricing Tool — Jay Kay Associates</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #0d1117;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #161b27 0%, #1e2638 100%);
+  padding: 20px 20px 30px;
+  text-align: center;
+  position: relative;
+  border-bottom: 1px solid #2a3348;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 20px;
+  background: #0d1117;
+  border-radius: 20px 20px 0 0;
+}
+.header-logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.logo-box {
+  width: 38px; height: 38px; background: #f5a623;
+  border-radius: 8px; display: grid; place-items: center;
+  font-weight: 800; font-size: 16px; color: #fff;
+}
+.header h1 { font-size: 18px; font-weight: 700; color: #f0f4f8; }
+.header .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 13px; color: #f5a623; margin-top: 2px; }
+
+/* MAIN */
+.main { padding: 20px 16px 40px; max-width: 480px; margin: 0 auto; }
+
+/* SETTINGS TOGGLE */
+.settings-toggle-btn {
+  width: 100%; background: #161b27; border: 1px solid #2a3348;
+  border-radius: 12px; padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; margin-bottom: 14px; transition: border 0.2s;
+  color: inherit;
+}
+.settings-toggle-btn:hover { border-color: #f5a623; }
+.settings-toggle-btn .left { display: flex; align-items: center; gap: 10px; }
+.settings-toggle-btn .stitle { font-size: 14px; font-weight: 600; color: #e2e8f0; }
+.settings-toggle-btn .ssub { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 11px; color: #4a5870; display: block; margin-top: 1px; }
+.settings-toggle-btn .arrow { color: #4a5870; font-size: 16px; transition: transform 0.3s; }
+.settings-toggle-btn.open .arrow { transform: rotate(180deg); }
+
+.settings-panel {
+  background: #161b27; border: 1px solid #2a3348;
+  border-radius: 14px; padding: 18px 16px;
+  margin-bottom: 16px; display: none;
+}
+.settings-panel.open { display: block; animation: fadeSlide 0.25s ease; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-sec-title {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px;
+  color: #4a5870; margin-bottom: 12px; font-weight: 600;
+}
+
+.settings-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.settings-row.two { grid-template-columns: 1fr 1fr; margin-bottom: 0; }
+
+.s-field label {
+  font-size: 12px; font-weight: 600; color: #8898b0; margin-bottom: 5px; display: block;
+}
+.s-field label .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 11px; font-weight: 400; display: block; color: #3a4860; }
+.s-field .s-wrap { position: relative; }
+.s-field .s-unit { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #4a5870; pointer-events: none; }
+.s-field input {
+  width: 100%; background: #0d1117; border: 1.5px solid #2a3348;
+  border-radius: 8px; padding: 9px 26px 9px 10px;
+  font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+  color: #f5a623; outline: none; transition: border 0.2s;
+}
+.s-field input:focus { border-color: #f5a623; }
+
+.profit-visual { background: #0d1117; border-radius: 10px; padding: 12px 14px; margin-top: 4px; }
+.pv-title { font-size: 11px; color: #3a4860; margin-bottom: 6px; }
+.pv-bar-wrap { height: 8px; background: #1e2638; border-radius: 4px; margin: 0 0 6px; position: relative; overflow: hidden; }
+.pv-seg-min  { position: absolute; left: 0; top: 0; height: 100%; background: #c04040; border-radius: 4px 0 0 4px; transition: width 0.3s; }
+.pv-seg-comp { position: absolute; top: 0; height: 100%; background: #c8a030; transition: left 0.3s, width 0.3s; }
+.pv-seg-safe { position: absolute; top: 0; right: 0; height: 100%; background: #3a9e6a; border-radius: 0 4px 4px 0; transition: width 0.3s; }
+.pv-labels { display: flex; justify-content: space-between; font-size: 10px; color: #3a4860; }
+
+/* BILL TOGGLE */
+.bill-section { margin-bottom: 16px; }
+.bill-label { font-size: 12px; color: #4a5870; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.bill-label .ml-lbl { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 12px; text-transform: none; letter-spacing: 0; }
+.bill-toggle {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: #161b27; border: 1px solid #2a3348;
+  border-radius: 12px; padding: 4px; gap: 4px;
+}
+.bill-btn {
+  padding: 10px 8px; border: none; border-radius: 9px; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600;
+  transition: all 0.25s; background: transparent; color: #4a5870; line-height: 1.4;
+}
+.bill-btn .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 11px; font-weight: 400; display: block; }
+.bill-btn.active { background: #1e2a3a; color: #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.3); border: 1px solid #3a4a60; }
+
+/* INPUT CARD */
+.input-card {
+  background: #161b27; border: 1px solid #2a3348;
+  border-radius: 18px; padding: 22px 20px; margin-bottom: 16px;
+}
+.card-title {
+  font-size: 11px; font-weight: 600; color: #3a4860;
+  text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 18px;
+}
+.card-title .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-weight: 400; font-size: 12px; text-transform: none; letter-spacing: 0; }
+.field { margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  font-size: 14px; font-weight: 600; color: #c8d4e4; margin-bottom: 6px;
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.field-label .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 12px; font-weight: 400; color: #4a5870; }
+.input-wrap { position: relative; }
+.sym {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 16px; font-weight: 600; color: #4a5870; pointer-events: none;
+}
+.unit-suf {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; color: #4a5870; pointer-events: none;
+}
+.input-wrap input {
+  width: 100%; padding: 14px 14px 14px 34px;
+  border: 1.5px solid #2a3348; border-radius: 12px;
+  font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700;
+  color: #f0f4f8; outline: none; background: #0d1117; transition: border 0.2s;
+}
+.input-wrap input:focus { border-color: #f5a623; }
+.input-wrap.has-unit input { padding-right: 40px; }
+.field-hint { font-size: 11px; color: #3a4860; margin-top: 4px; }
+.field-hint .ml { font-family: 'Noto Sans Malayalam', sans-serif; }
+
+/* COST BOX */
+.cost-box {
+  background: #161b27; border: 1px solid #2a3348; border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 16px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cost-box .cb-label { font-size: 12px; color: #4a5870; }
+.cost-box .cb-label .ml { font-family: 'Noto Sans Malayalam', sans-serif; display: block; font-size: 11px; }
+.cost-box .cb-val { font-size: 22px; font-weight: 800; color: #f5a623; }
+
+/* ITC WARNING */
+.itc-warn {
+  background: #221a00; border: 1px solid #664e00;
+  border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
+  font-size: 12px; color: #fbbf24; display: none;
+}
+.itc-warn .ml { font-family: 'Noto Sans Malayalam', sans-serif; display: block; margin-top: 3px; color: #d97706; }
+
+/* RESULT TITLE */
+.result-title {
+  font-size: 11px; font-weight: 600; color: #3a4860;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  margin-bottom: 14px; padding-left: 2px;
+}
+.result-title .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-weight: 400; font-size: 12px; text-transform: none; letter-spacing: 0; }
+
+/* CARDS */
+.scard {
+  border-radius: 18px; padding: 20px; margin-bottom: 14px;
+  transition: transform 0.15s;
+}
+.scard:active { transform: scale(0.98); }
+
+.scard-safe { background: #0a1a10; border: 1.5px solid #1e4a2e; box-shadow: 0 0 22px rgba(58,158,106,0.10); }
+.scard-comp { background: #1a1400; border: 1.5px solid #4a3800; box-shadow: 0 0 22px rgba(245,166,35,0.08); }
+.scard-min  { background: #1a0a0a; border: 1.5px solid #4a1e1e; box-shadow: 0 0 22px rgba(224,82,82,0.08); }
+
+.scard-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.scard-emoji { font-size: 22px; }
+.scard-htxt h3 { font-size: 16px; font-weight: 700; }
+.scard-htxt .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 12px; font-weight: 400; opacity: 0.55; }
+.scard-safe .scard-htxt h3 { color: #4ac88a; }
+.scard-comp .scard-htxt h3 { color: #f5c842; }
+.scard-min  .scard-htxt h3 { color: #f07070; }
+
+.scard-badge {
+  margin-left: auto; padding: 4px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.3px; white-space: nowrap;
+}
+.scard-safe .scard-badge { background: rgba(74,200,138,0.15); color: #4ac88a; border: 1px solid rgba(74,200,138,0.3); }
+.scard-comp .scard-badge { background: rgba(245,200,66,0.12); color: #f5c842; border: 1px solid rgba(245,200,66,0.3); }
+.scard-min  .scard-badge { background: rgba(240,112,112,0.12); color: #f07070; border: 1px solid rgba(240,112,112,0.3); }
+
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.di {
+  background: rgba(255,255,255,0.04); border-radius: 10px; padding: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.di.span2 { grid-column: 1 / -1; }
+.di .dl { font-size: 11px; color: #4a5870; line-height: 1.4; }
+.di .dl .ml { font-family: 'Noto Sans Malayalam', sans-serif; display: block; }
+.di .dv { font-size: 20px; font-weight: 700; margin-top: 5px; }
+.di .dv.big { font-size: 28px; }
+
+.scard-safe .dv { color: #4ac88a; }
+.scard-comp .dv { color: #f5c842; }
+.scard-min  .dv { color: #f07070; }
+
+.profit-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  margin-top: 12px;
+}
+.scard-safe .profit-pill { background: rgba(74,200,138,0.12); color: #4ac88a; }
+.scard-comp .profit-pill { background: rgba(245,200,66,0.12); color: #f5c842; }
+.scard-min  .profit-pill { background: rgba(240,112,112,0.12); color: #f07070; }
+
+/* EMPTY */
+.empty { text-align: center; padding: 40px 20px; }
+.empty .ei { font-size: 52px; opacity: 0.2; margin-bottom: 12px; }
+.empty p { font-size: 14px; color: #3a4860; }
+.empty .ml { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 13px; display: block; margin-top: 4px; color: #2a3448; }
+
+/* DIVIDER */
+.divider {
+  text-align: center; position: relative; margin: 24px 0 18px;
+}
+.divider::before {
+  content: ''; position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px; background: #1e2638;
+}
+.divider span {
+  position: relative; background: #0d1117;
+  padding: 0 14px; font-size: 11px; color: #3a4860; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* REVISION */
+.rev-card {
+  background: #161b27; border: 1px solid #2a3348;
+  border-radius: 18px; padding: 22px 20px; margin-bottom: 20px;
+}
+.rev-card .rc-title { font-size: 15px; font-weight: 700; color: #e2e8f0; margin-bottom: 2px; }
+.rev-card .rc-sub { font-family: 'Noto Sans Malayalam', sans-serif; font-size: 13px; color: #4a5870; margin-bottom: 18px; }
+
+.rev-result {
+  background: linear-gradient(135deg, #141c28, #0e1520);
+  border: 1px solid #2a3a50; border-radius: 14px; padding: 18px;
+  margin-top: 16px; display: none;
+}
+.rr-label { font-size: 11px; color: #4a5870; }
+.rr-label .ml { font-family: 'Noto Sans Malayalam', sans-serif; display: block; font-size: 11px; }
+.rr-main { font-size: 32px; font-weight: 800; color: #f5a623; margin: 6px 0 12px; }
+.rr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rr-item { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px; }
+.rr-item .ril { font-size: 11px; color: #4a5870; line-height: 1.4; }
+.rr-item .ril .ml { font-family: 'Noto Sans Malayalam', sans-serif; display: block; }
+.rr-item .riv { font-size: 17px; font-weight: 700; color: #e2e8f0; margin-top: 4px; }
+
+.footer { text-align: center; padding: 10px; font-size: 11px; color: #2a3348; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim { animation: slideUp 0.3s ease forwards; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">
+    <div class="logo-box">JK</div>
+    <div><div style="font-size:17px;font-weight:700;color:#f0f4f8">Jay Kay Associates</div></div>
+  </div>
+  <div class="ml">വില കണക്കാക്കൽ ഉപകരണം · Pricing Tool</div>
+</div>
+
+<div class="main">
+
+  <!-- SETTINGS -->
+  <button class="settings-toggle-btn" id="settingsBtn" onclick="toggleSettings()">
+    <div class="left">
+      <span style="font-size:20px">⚙️</span>
+      <div>
+        <div class="stitle">Profit Settings</div>
+        <span class="ssub">ലാഭ ക്രമീകരണം · Tap to set your profit %</span>
+      </div>
+    </div>
+    <span class="arrow">▼</span>
+  </button>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-sec-title">Set Profit % for Each Card · ഓരോ കാർഡിനുമുള്ള ലാഭം</div>
+    <div class="settings-row">
+      <div class="s-field">
+        <label>🟢 Safe<span class="ml">സുരക്ഷിത</span></label>
+        <div class="s-wrap"><input type="number" id="cfg_safe" value="25" min="1" max="100" oninput="onSettingChange()"/><span class="s-unit">%</span></div>
+      </div>
+      <div class="s-field">
+        <label>🟡 Competitive<span class="ml">മത്സരം</span></label>
+        <div class="s-wrap"><input type="number" id="cfg_comp" value="15" min="1" max="100" oninput="onSettingChange()"/><span class="s-unit">%</span></div>
+      </div>
+      <div class="s-field">
+        <label>🔴 Minimum<span class="ml">കുറഞ്ഞത്</span></label>
+        <div class="s-wrap"><input type="number" id="cfg_min" value="8" min="1" max="100" oninput="onSettingChange()"/><span class="s-unit">%</span></div>
+      </div>
+    </div>
+
+    <div class="profit-visual">
+      <div class="pv-title">Profit Range · ലാഭ ശ്രേണി</div>
+      <div class="pv-bar-wrap">
+        <div class="pv-seg-min"  id="seg_min"  style="width:8%"></div>
+        <div class="pv-seg-comp" id="seg_comp" style="left:8%;width:7%"></div>
+        <div class="pv-seg-safe" id="seg_safe" style="width:10%"></div>
+      </div>
+      <div class="pv-labels">
+        <span id="lbl_min">🔴 8%</span>
+        <span id="lbl_comp">🟡 15%</span>
+        <span id="lbl_safe">🟢 25%</span>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+    <div class="settings-sec-title">Other Settings</div>
+    <div class="settings-row two">
+      <div class="s-field">
+        <label>GST %<span class="ml">GST നിരക്ക്</span></label>
+        <div class="s-wrap"><input type="number" id="gstRate" value="18" min="0" max="28" oninput="onSettingChange()"/><span class="s-unit">%</span></div>
+      </div>
+      <div class="s-field">
+        <label>Overhead %<span class="ml">മറ്റ് ചെലവ്</span></label>
+        <div class="s-wrap"><input type="number" id="overhead" value="0" min="0" max="30" oninput="onSettingChange()"/><span class="s-unit">%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BILL TOGGLE -->
+  <div class="bill-section">
+    <div class="bill-label">Billing Type · <span class="ml-lbl">ബില്ലിംഗ് തരം</span></div>
+    <div class="bill-toggle">
+      <button class="bill-btn active" id="btnWith" onclick="setBill('with')">
+        With GST Bill <span class="ml">GST ബിൽ സഹിതം</span>
+      </button>
+      <button class="bill-btn" id="btnWithout" onclick="setBill('without')">
+        Without Bill <span class="ml">ബില്ല് ഇല്ലാതെ</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="input-card">
+    <div class="card-title">Enter Details · <span class="ml">വിവരങ്ങൾ നൽകുക</span></div>
+    <div class="field">
+      <div class="field-label">Purchase Rate <span class="ml">വാങ്ങൽ വില</span></div>
+      <div class="input-wrap">
+        <span class="sym">₹</span>
+        <input type="number" id="purchaseRate" placeholder="0" oninput="calculate()" inputmode="decimal"/>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">Purchase Discount % <span class="ml">വാങ്ങൽ കിഴിവ്</span></div>
+      <div class="input-wrap has-unit">
+        <span class="sym" style="font-size:14px;font-weight:400">%</span>
+        <input type="number" id="purchaseDiscount" placeholder="0" oninput="calculate()" inputmode="decimal" style="padding-left:28px"/>
+        <span class="unit-suf">%</span>
+      </div>
+      <div class="field-hint">Optional · <span class="ml">സപ്ലയർ നൽകുന്ന കിഴിവ്</span></div>
+    </div>
+  </div>
+
+  <!-- ITC WARNING -->
+  <div class="itc-warn" id="itcWarning">
+    ⚠️ Without Bill: GST paid on purchase becomes a loss. Added to your cost automatically.
+    <span class="ml">ബില്ല് ഇല്ലാതെ: GST നഷ്ടമാണ്. അത് ചെലവിൽ ചേർത്തിട്ടുണ്ട്.</span>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsSection" style="display:none">
+    <div class="cost-box">
+      <div class="cb-label">Your True Cost<span class="ml">യഥാർത്ഥ ചെലവ്</span></div>
+      <div class="cb-val" id="trueCostDisplay">—</div>
+    </div>
+
+    <div class="result-title">Suggested Selling Prices · <span class="ml">നിർദ്ദേശിത വിൽക്കൽ വിലകൾ</span></div>
+
+    <!-- SAFE -->
+    <div class="scard scard-safe anim" style="animation-delay:0s">
+      <div class="scard-header">
+        <span class="scard-emoji">🟢</span>
+        <div class="scard-htxt"><h3>Safe Price</h3><div class="ml">സുരക്ഷിത വില</div></div>
+        <div class="scard-badge">✓ RECOMMENDED</div>
+      </div>
+      <div class="data-grid">
+        <div class="di span2"><div class="dl">Selling Rate · <span class="ml">വിൽക്കൽ വില</span></div><div class="dv big" id="safe_rate">—</div></div>
+        <div class="di"><div class="dl">Max Discount<span class="ml">കൊടുക്കാവുന്ന കിഴിവ്</span></div><div class="dv" id="safe_disc">—</div></div>
+        <div class="di"><div class="dl">Profit Amount<span class="ml">ലാഭ തുക</span></div><div class="dv" id="safe_amt">—</div></div>
+      </div>
+      <span class="profit-pill" id="safe_pill">25% Profit</span>
+    </div>
+
+    <!-- COMPETITIVE -->
+    <div class="scard scard-comp anim" style="animation-delay:0.07s">
+      <div class="scard-header">
+        <span class="scard-emoji">🟡</span>
+        <div class="scard-htxt"><h3>Competitive Price</h3><div class="ml">മത്സര വില</div></div>
+        <div class="scard-badge">⚡ COMPETITIVE</div>
+      </div>
+      <div class="data-grid">
+        <div class="di span2"><div class="dl">Selling Rate · <span class="ml">വിൽക്കൽ വില</span></div><div class="dv big" id="comp_rate">—</div></div>
+        <div class="di"><div class="dl">Max Discount<span class="ml">കൊടുക്കാവുന്ന കിഴിവ്</span></div><div class="dv" id="comp_disc">—</div></div>
+        <div class="di"><div class="dl">Profit Amount<span class="ml">ലാഭ തുക</span></div><div class="dv" id="comp_amt">—</div></div>
+      </div>
+      <span class="profit-pill" id="comp_pill">15% Profit</span>
+    </div>
+
+    <!-- MINIMUM -->
+    <div class="scard scard-min anim" style="animation-delay:0.14s">
+      <div class="scard-header">
+        <span class="scard-emoji">🔴</span>
+        <div class="scard-htxt"><h3>Minimum Price</h3><div class="ml">ഏറ്റവും കുറഞ്ഞ വില</div></div>
+        <div class="scard-badge">⛔ DO NOT GO BELOW</div>
+      </div>
+      <div class="data-grid">
+        <div class="di span2"><div class="dl">Minimum Selling Rate · <span class="ml">കുറഞ്ഞ വില</span></div><div class="dv big" id="min_rate">—</div></div>
+        <div class="di"><div class="dl">Max Discount<span class="ml">കൊടുക്കാവുന്ന കിഴിവ്</span></div><div class="dv" id="min_disc">—</div></div>
+        <div class="di"><div class="dl">Profit Amount<span class="ml">ലാഭ തുക</span></div><div class="dv" id="min_amt">—</div></div>
+      </div>
+      <span class="profit-pill" id="min_pill">8% Profit</span>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div class="empty" id="emptyState">
+    <div class="ei">🧮</div>
+    <p>Enter purchase rate above to see suggestions
+      <span class="ml">നിർദ്ദേശങ്ങൾ കാണാൻ വാങ്ങൽ വില നൽകുക</span>
+    </p>
+  </div>
+
+  <!-- PRICE REVISION -->
+  <div class="divider"><span>Price Revision · വില പരിഷ്കരണം</span></div>
+
+  <div class="rev-card">
+    <div class="rc-title">📈 Supplier Increased Price?</div>
+    <div class="rc-sub">വിലകൂടിയോ? പുതിയ വില കണക്കാക്കുക</div>
+
+    <div class="field">
+      <div class="field-label">Old Purchase Rate <span class="ml" style="font-family:'Noto Sans Malayalam';font-size:12px;color:#4a5870">പഴയ വാങ്ങൽ വില</span></div>
+      <div class="input-wrap"><span class="sym">₹</span><input type="number" id="rev_old" placeholder="0" oninput="calcRevision()" inputmode="decimal"/></div>
+    </div>
+    <div class="field">
+      <div class="field-label">Price Increase % <span class="ml" style="font-family:'Noto Sans Malayalam';font-size:12px;color:#4a5870">വർദ്ധന ശതമാനം</span></div>
+      <div class="input-wrap has-unit">
+        <span class="sym" style="font-size:14px;font-weight:400">%</span>
+        <input type="number" id="rev_inc" placeholder="0" oninput="calcRevision()" inputmode="decimal" style="padding-left:28px"/>
+        <span class="unit-suf">%</span>
+      </div>
+    </div>
+    <div class="rev-result" id="revResult">
+      <div class="rr-label">New Purchase Cost · <span class="ml" style="font-family:'Noto Sans Malayalam'">പുതിയ വാങ്ങൽ ചെലവ്</span></div>
+      <div class="rr-main" id="rev_newCost">—</div>
+      <div class="rr-grid">
+        <div class="rr-item"><div class="ril">🟢 Safe Selling Rate<span class="ml">സുരക്ഷിത വില</span></div><div class="riv" id="rev_safe">—</div></div>
+        <div class="rr-item"><div class="ril">🟡 Competitive Rate<span class="ml">മത്സര വില</span></div><div class="riv" id="rev_comp">—</div></div>
+        <div class="rr-item"><div class="ril">🔴 Minimum Rate<span class="ml">കുറഞ്ഞ വില</span></div><div class="riv" id="rev_min">—</div></div>
+        <div class="rr-item"><div class="ril">Price Increase ₹<span class="ml">വില വർദ്ധന</span></div><div class="riv" id="rev_diff">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Jay Kay Associates · House of Fastening Accessories</div>
+</div>
+
+<script>
+let billType = 'with';
+
+function toggleSettings() {
+  const btn = document.getElementById('settingsBtn');
+  const panel = document.getElementById('settingsPanel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+  updateBar();
+}
+
+function onSettingChange() { updateBar(); calculate(); }
+
+function updateBar() {
+  const safe = parseFloat(document.getElementById('cfg_safe').value) || 25;
+  const comp = parseFloat(document.getElementById('cfg_comp').value) || 15;
+  const min  = parseFloat(document.getElementById('cfg_min').value)  || 8;
+  const total = safe + comp + min;
+  const minW  = Math.round((min  / total) * 100);
+  const compW = Math.round((comp / total) * 100);
+  const safeW = 100 - minW - compW;
+  document.getElementById('seg_min').style.width  = minW  + '%';
+  document.getElementById('seg_comp').style.left  = minW  + '%';
+  document.getElementById('seg_comp').style.width = compW + '%';
+  document.getElementById('seg_safe').style.width = safeW + '%';
+  document.getElementById('lbl_min').textContent  = '🔴 ' + min  + '%';
+  document.getElementById('lbl_comp').textContent = '🟡 ' + comp + '%';
+  document.getElementById('lbl_safe').textContent = '🟢 ' + safe + '%';
+}
+
+function setBill(t) {
+  billType = t;
+  document.getElementById('btnWith').classList.toggle('active', t === 'with');
+  document.getElementById('btnWithout').classList.toggle('active', t === 'without');
+  document.getElementById('itcWarning').style.display = t === 'without' ? 'block' : 'none';
+  calculate();
+}
+
+function fmt(n) {
+  if (isNaN(n) || n === null) return '—';
+  return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtP(n) { return isNaN(n) ? '—' : n.toFixed(1) + '%'; }
+
+function getTrueCost() {
+  const pp  = parseFloat(document.getElementById('purchaseRate').value) || 0;
+  const pd  = parseFloat(document.getElementById('purchaseDiscount').value) || 0;
+  const gst = parseFloat(document.getElementById('gstRate').value) || 18;
+  const oh  = parseFloat(document.getElementById('overhead').value) || 0;
+  const netCost = pp * (1 - pd / 100);
+  const withOH  = netCost * (1 + oh / 100);
+  return billType === 'without' ? withOH * (1 + gst / 100) : withOH;
+}
+
+function calculate() {
+  const pp = parseFloat(document.getElementById('purchaseRate').value);
+  if (!pp || pp <= 0) {
+    document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  const tc = getTrueCost();
+  document.getElementById('trueCostDisplay').textContent = fmt(tc);
+
+  const safe = parseFloat(document.getElementById('cfg_safe').value) || 25;
+  const comp = parseFloat(document.getElementById('cfg_comp').value) || 15;
+  const min  = parseFloat(document.getElementById('cfg_min').value)  || 8;
+
+  renderCard('safe', tc, pp, safe);
+  renderCard('comp', tc, pp, comp);
+  renderCard('min',  tc, pp, min);
+}
+
+function renderCard(prefix, tc, pp, profitPct) {
+  const sellRate  = tc * (1 + profitPct / 100);
+  const profitAmt = sellRate - tc;
+  let maxDisc = pp > 0 ? (1 - sellRate / pp) * 100 : 0;
+  if (maxDisc < 0) maxDisc = 0;
+
+  document.getElementById(prefix + '_rate').textContent = fmt(sellRate);
+  document.getElementById(prefix + '_disc').textContent = fmtP(maxDisc);
+  document.getElementById(prefix + '_amt').textContent  = fmt(profitAmt);
+  document.getElementById(prefix + '_pill').textContent = profitPct + '% Profit · ' + profitPct + '% ലാഭം';
+}
+
+function calcRevision() {
+  const oldPP = parseFloat(document.getElementById("rev_old").value);
+  const inc   = parseFloat(document.getElementById("rev_inc").value);
+  if (!oldPP || !inc) { document.getElementById("revResult").style.display = "none"; return; }
+
+  const gst   = parseFloat(document.getElementById("gstRate").value) || 18;
+  const oh    = parseFloat(document.getElementById("overhead").value) || 0;
+  const newPP = oldPP * (1 + inc / 100);
+  const newWithOH = newPP * (1 + oh / 100);
+  const newTC = billType === "without" ? newWithOH * (1 + gst / 100) : newWithOH;
+  const oldWithOH = oldPP * (1 + oh / 100);
+  const oldTC = billType === "without" ? oldWithOH * (1 + gst / 100) : oldWithOH;
+  const safe = parseFloat(document.getElementById("cfg_safe").value) || 25;
+  const comp = parseFloat(document.getElementById("cfg_comp").value) || 15;
+  const min  = parseFloat(document.getElementById("cfg_min").value)  || 8;
+
+  document.getElementById("revResult").style.display = "block";
+  document.getElementById("rev_newCost").textContent = fmt(newTC);
+  document.getElementById("rev_safe").textContent    = fmt(newTC * (1 + safe / 100));
+  document.getElementById("rev_comp").textContent    = fmt(newTC * (1 + comp / 100));
+  document.getElementById("rev_min").textContent     = fmt(newTC * (1 + min  / 100));
+  document.getElementById("rev_diff").textContent    = fmt(newTC - oldTC);
+}
+
+window.onload = () => { updateBar(); };
+</script>
+</body>
+</html>

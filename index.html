@@ -1,844 +1,666 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Pricing Tool — Jay Kay Associates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
-
 :root {
-–bg: #0f1117;
-–surface: #1a1d27;
-–surface2: #22263a;
-–border: #2e3248;
-–text: #e8eaf6;
-–muted: #7b80a0;
-–accent: #6c63ff;
-–accent2: #a78bfa;
-–green: #4ade80;
-–green-bg: rgba(74,222,128,0.08);
-–yellow: #fbbf24;
-–yellow-bg: rgba(251,191,36,0.08);
-–red: #f87171;
-–red-bg: rgba(248,113,113,0.08);
-–radius: 14px;
-–radius-sm: 8px;
+  --bg: #000000;
+  --bg1: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #181818;
+  --bg4: #202020;
+  --border: #2a2a2a;
+  --border2: #333333;
+  --text: #f0f0f0;
+  --text2: #888888;
+  --text3: #555555;
+  --accent: #e8ff00;
+  --accent-dim: rgba(232,255,0,0.12);
+  --accent-border: rgba(232,255,0,0.3);
+  --green: #00e676;
+  --green-bg: rgba(0,230,118,0.07);
+  --green-border: rgba(0,230,118,0.2);
+  --yellow: #ffb300;
+  --yellow-bg: rgba(255,179,0,0.07);
+  --yellow-border: rgba(255,179,0,0.2);
+  --red: #ff4444;
+  --red-bg: rgba(255,68,68,0.07);
+  --red-border: rgba(255,68,68,0.2);
+  --r: 10px;
+  --rs: 6px;
 }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
 
-body {
-font-family: ‘DM Sans’, sans-serif;
-background: var(–bg);
-color: var(–text);
-min-height: 100vh;
-padding: 0 0 60px;
+body{
+  font-family:'Syne',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:80px;
 }
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
 /* ── HEADER ── */
-header {
-background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
-border-bottom: 1px solid var(–border);
-padding: 18px 20px;
-display: flex;
-align-items: center;
-gap: 14px;
-position: sticky;
-top: 0;
-z-index: 50;
+header{
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(10px);
 }
-.logo-circle {
-width: 42px; height: 42px;
-background: linear-gradient(135deg, var(–accent), var(–accent2));
-border-radius: 12px;
-display: flex; align-items: center; justify-content: center;
-font-weight: 700; font-size: 15px; color: #fff; flex-shrink: 0;
+.logo{
+  width:38px;height:38px;
+  background:var(--accent);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;
+  font-weight:700;font-size:13px;color:#000;flex-shrink:0;
+  letter-spacing:-1px;
 }
-.header-text h1 { font-size: 16px; font-weight: 700; color: #fff; }
-.header-text p { font-size: 11px; color: var(–muted); margin-top: 1px; }
+.header-text h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:-0.3px;}
+.header-text p{font-size:10px;color:var(--text3);margin-top:2px;font-family:'Space Mono',monospace;}
+.header-pill{
+  margin-left:auto;
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  color:var(--accent);
+  font-size:10px;font-weight:700;
+  font-family:'Space Mono',monospace;
+  padding:4px 10px;border-radius:20px;
+  letter-spacing:0.05em;
+}
 
 /* ── TABS ── */
-.tabs {
-display: flex;
-background: var(–surface);
-border-bottom: 1px solid var(–border);
-padding: 0 16px;
-gap: 4px;
-overflow-x: auto;
-scrollbar-width: none;
+.tabs{
+  display:flex;
+  background:var(--bg1);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;
+  gap:0;
+  overflow-x:auto;
+  scrollbar-width:none;
 }
-.tabs::-webkit-scrollbar { display: none; }
-.tab-btn {
-padding: 12px 18px;
-border: none;
-background: transparent;
-color: var(–muted);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 13px;
-font-weight: 600;
-cursor: pointer;
-border-bottom: 2px solid transparent;
-white-space: nowrap;
-transition: all 0.2s;
+.tabs::-webkit-scrollbar{display:none;}
+.tab-btn{
+  padding:13px 20px;
+  border:none;
+  background:transparent;
+  color:var(--text3);
+  font-family:'Syne',sans-serif;
+  font-size:12px;font-weight:700;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+  transition:all 0.2s;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
 }
-.tab-btn.active {
-color: var(–accent2);
-border-bottom-color: var(–accent2);
-}
-.tab-btn:hover:not(.active) { color: var(–text); }
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-btn:hover:not(.active){color:var(--text);}
 
 /* ── TAB CONTENT ── */
-.tab-content { display: none; padding: 16px; max-width: 600px; margin: 0 auto; }
-.tab-content.active { display: block; }
+.tab-content{display:none;padding:16px;max-width:580px;margin:0 auto;}
+.tab-content.active{display:block;}
 
-/* ── SECTION CARD ── */
-.card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: var(–radius);
-padding: 16px;
-margin-bottom: 14px;
+/* ── CARD ── */
+.card{
+  background:var(--bg1);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px;
+  margin-bottom:12px;
 }
-.card-title {
-font-size: 11px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.08em;
-color: var(–muted);
-margin-bottom: 14px;
-display: flex;
-align-items: center;
-gap: 7px;
+.card-title{
+  font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--text3);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
 }
-.card-title span { font-size: 14px; }
+.card-title .ct-icon{
+  width:22px;height:22px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+}
 
 /* ── FORM ELEMENTS ── */
-.field { margin-bottom: 12px; }
-.field label {
-display: block;
-font-size: 12px;
-font-weight: 600;
-color: var(–muted);
-margin-bottom: 5px;
+.field{margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+.field label{
+  display:block;font-size:10px;font-weight:700;
+  color:var(--text3);margin-bottom:5px;
+  text-transform:uppercase;letter-spacing:0.08em;
 }
-.input-wrap {
-position: relative;
-display: flex;
-align-items: center;
+.input-wrap{position:relative;display:flex;align-items:center;}
+.input-prefix,.input-suffix{
+  position:absolute;font-size:12px;font-weight:700;
+  color:var(--text3);pointer-events:none;
+  font-family:'Space Mono',monospace;
 }
-.input-prefix, .input-suffix {
-position: absolute;
-font-size: 13px;
-font-weight: 600;
-color: var(–muted);
-pointer-events: none;
-}
-.input-prefix { left: 12px; }
-.input-suffix { right: 12px; }
+.input-prefix{left:11px;}
+.input-suffix{right:11px;}
 
-input[type=“number”], input[type=“text”] {
-width: 100%;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: var(–radius-sm);
-color: var(–text);
-font-family: ‘DM Mono’, monospace;
-font-size: 14px;
-padding: 10px 14px;
-outline: none;
-transition: border 0.2s;
--moz-appearance: textfield;
+input[type="number"],input[type="text"]{
+  width:100%;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  color:var(--text);
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  padding:10px 12px;
+  outline:none;
+  transition:border 0.15s,background 0.15s;
+  -moz-appearance:textfield;
 }
-input[type=“number”]::-webkit-inner-spin-button,
-input[type=“number”]::-webkit-outer-spin-button { -webkit-appearance: none; }
-input[type=“number”]:focus, input[type=“text”]:focus {
-border-color: var(–accent);
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type="number"]:focus,input[type="text"]:focus{
+  border-color:var(--accent);
+  background:var(--bg3);
 }
-.has-prefix input { padding-left: 28px; }
-.has-suffix input { padding-right: 36px; }
+.has-prefix input{padding-left:26px;}
+.has-suffix input{padding-right:34px;}
 
-/* ── QUANTITY ROW ── */
-.qty-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-}
+/* ── GRID ── */
+.qty-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.profit-settings-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.item-details-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.revision-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
 
-/* ── BILLING TOGGLE ── */
-.toggle-row {
-display: flex;
-gap: 8px;
+/* ── TOGGLE BUTTONS ── */
+.toggle-row,.profit-mode-row{display:flex;gap:6px;}
+.toggle-btn,.profit-mode-btn{
+  flex:1;padding:9px 8px;
+  border-radius:var(--rs);
+  border:1px solid var(--border);
+  background:var(--bg2);
+  color:var(--text3);
+  font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;
+  cursor:pointer;
+  text-align:center;
+  transition:all 0.15s;
+  letter-spacing:0.04em;
 }
-.toggle-btn {
-flex: 1;
-padding: 9px 10px;
-border-radius: var(–radius-sm);
-border: 1px solid var(–border);
-background: var(–surface2);
-color: var(–muted);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-text-align: center;
-transition: all 0.2s;
+.toggle-btn.active{
+  background:var(--accent-dim);
+  border-color:var(--accent-border);
+  color:var(--accent);
 }
-.toggle-btn.active {
-background: rgba(108,99,255,0.15);
-border-color: var(–accent);
-color: var(–accent2);
-}
+.profit-mode-btn[data-mode="safe"].active{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+.profit-mode-btn[data-mode="competitive"].active{background:var(--yellow-bg);border-color:var(--yellow-border);color:var(--yellow);}
+.profit-mode-btn[data-mode="minimum"].active{background:var(--red-bg);border-color:var(--red-border);color:var(--red);}
 
-/* ── PROFIT MODE SELECTOR ── */
-.profit-mode-row {
-display: flex;
-gap: 8px;
-margin-bottom: 14px;
+/* ── RESULT ROWS ── */
+.result-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
 }
-.profit-mode-btn {
-flex: 1;
-padding: 10px 8px;
-border-radius: var(–radius-sm);
-border: 1px solid var(–border);
-background: var(–surface2);
-color: var(–muted);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-text-align: center;
-transition: all 0.2s;
+.result-row:last-child{border-bottom:none;}
+.result-label{font-size:11px;color:var(--text2);font-weight:600;}
+.result-value{
+  font-family:'Space Mono',monospace;
+  font-size:13px;font-weight:700;color:var(--text);
 }
-.profit-mode-btn[data-mode=“safe”].active {
-background: var(–green-bg);
-border-color: var(–green);
-color: var(–green);
-}
-.profit-mode-btn[data-mode=“competitive”].active {
-background: var(–yellow-bg);
-border-color: var(–yellow);
-color: var(–yellow);
-}
-.profit-mode-btn[data-mode=“minimum”].active {
-background: var(–red-bg);
-border-color: var(–red);
-color: var(–red);
-}
+.result-value.big{font-size:18px;color:#fff;}
+.result-value.green{color:var(--green);}
+.result-value.yellow{color:var(--yellow);}
+.result-value.red{color:var(--red);}
+.result-value.accent{color:var(--accent);}
 
-/* ── RESULT ROW ── */
-.result-row {
-display: flex;
-justify-content: space-between;
-align-items: baseline;
-padding: 7px 0;
-border-bottom: 1px solid var(–border);
+/* ── COST DISPLAY ── */
+.cost-display{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--rs);
+  padding:12px;
+  margin-bottom:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.result-row:last-child { border-bottom: none; }
-.result-label { font-size: 12px; color: var(–muted); font-weight: 500; }
-.result-value {
-font-family: ‘DM Mono’, monospace;
-font-size: 14px;
-font-weight: 500;
-color: var(–text);
-}
-.result-value.big {
-font-size: 20px;
-font-weight: 700;
-color: #fff;
-}
-.result-value.green { color: var(–green); }
-.result-value.yellow { color: var(–yellow); }
-.result-value.red { color: var(–red); }
+.cd-label{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;}
+.cd-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--text);}
 
 /* ── PRICE CARDS ── */
-.price-cards { display: flex; flex-direction: column; gap: 10px; }
-.price-card {
-border-radius: var(–radius);
-padding: 14px 16px;
-border: 1px solid var(–border);
-transition: all 0.2s;
+.price-cards{display:flex;flex-direction:column;gap:8px;}
+.price-card{
+  border-radius:var(--r);
+  padding:14px 16px;
+  border:1px solid var(--border);
+  background:var(--bg2);
+  transition:all 0.2s;
+  cursor:default;
 }
-.price-card.safe { background: var(–green-bg); border-color: rgba(74,222,128,0.25); }
-.price-card.competitive { background: var(–yellow-bg); border-color: rgba(251,191,36,0.25); }
-.price-card.minimum { background: var(–red-bg); border-color: rgba(248,113,113,0.25); }
-.price-card.highlighted { transform: scale(1.01); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-.pc-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 10px;
+.price-card.safe{border-color:var(--green-border);}
+.price-card.competitive{border-color:var(--yellow-border);}
+.price-card.minimum{border-color:var(--red-border);}
+.price-card.highlighted{
+  background:var(--bg3);
+  box-shadow:0 0 0 1px var(--accent-border), 0 8px 32px rgba(0,0,0,0.5);
+  transform:translateY(-1px);
 }
-.pc-badge {
-font-size: 10px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.08em;
-padding: 3px 8px;
-border-radius: 20px;
+.pc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.pc-badge{
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.1em;padding:3px 9px;border-radius:20px;
+  font-family:'Space Mono',monospace;
 }
-.safe .pc-badge { background: rgba(74,222,128,0.15); color: var(–green); }
-.competitive .pc-badge { background: rgba(251,191,36,0.15); color: var(–yellow); }
-.minimum .pc-badge { background: rgba(248,113,113,0.15); color: var(–red); }
-.pc-profit-tag { font-size: 11px; color: var(–muted); }
-.pc-price {
-font-family: ‘DM Mono’, monospace;
-font-size: 22px;
-font-weight: 700;
-color: #fff;
-margin-bottom: 8px;
+.safe .pc-badge{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.competitive .pc-badge{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);}
+.minimum .pc-badge{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.pc-profit-tag{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;}
+.pc-price{
+  font-family:'Space Mono',monospace;
+  font-size:24px;font-weight:700;color:#fff;margin-bottom:10px;
 }
-.pc-price .unit { font-size: 13px; color: var(–muted); font-weight: 400; margin-left: 4px; }
-.pc-details { display: flex; gap: 16px; flex-wrap: wrap; }
-.pc-detail { font-size: 11px; color: var(–muted); }
-.pc-detail strong { color: var(–text); font-weight: 600; }
-.empty-state {
-text-align: center;
-padding: 28px 0;
-color: var(–muted);
-font-size: 13px;
-}
-.empty-state .icon { font-size: 28px; margin-bottom: 8px; }
+.pc-price .unit{font-size:12px;color:var(--text3);font-weight:400;margin-left:4px;}
+.pc-details{display:flex;gap:14px;flex-wrap:wrap;}
+.pc-detail{font-size:11px;color:var(--text3);}
+.pc-detail strong{color:var(--text2);}
 
-/* ── INVOICE SECTION ── */
-.invoice-add-row {
-background: var(–surface2);
-border: 1px dashed var(–border);
-border-radius: var(–radius);
-padding: 14px;
-margin-bottom: 14px;
+/* ── SELECTED RESULT BOX ── */
+.selected-result-box{
+  background:var(--bg2);
+  border:1px solid var(--accent-border);
+  border-radius:var(--r);
+  padding:14px;
 }
-.invoice-add-row .field { margin-bottom: 10px; }
-.item-name-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
-.item-details-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.srb-amount{
+  font-family:'Space Mono',monospace;
+  font-size:32px;font-weight:700;color:var(--accent);
+  line-height:1;margin-bottom:4px;
+}
+.srb-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;font-weight:700;}
+.srb-rows{}
 
-.add-item-btn {
-width: 100%;
-padding: 11px;
-border-radius: var(–radius-sm);
-border: none;
-background: linear-gradient(135deg, var(–accent), var(–accent2));
-color: #fff;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 13px;
-font-weight: 700;
-cursor: pointer;
-transition: opacity 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 6px;
+/* ── EMPTY STATE ── */
+.empty-state{
+  text-align:center;padding:28px 0;color:var(--text3);font-size:12px;
 }
-.add-item-btn:hover { opacity: 0.9; }
+.empty-state .icon{font-size:24px;margin-bottom:8px;opacity:0.5;}
 
-/* ── INVOICE TABLE ── */
-.invoice-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.invoice-table th {
-text-align: left;
-color: var(–muted);
-font-weight: 600;
-text-transform: uppercase;
-letter-spacing: 0.06em;
-font-size: 10px;
-padding: 6px 8px;
-border-bottom: 1px solid var(–border);
+/* ── INVOICE ── */
+.invoice-add-row{
+  background:var(--bg2);
+  border:1px dashed var(--border2);
+  border-radius:var(--r);
+  padding:14px;margin-bottom:14px;
 }
-.invoice-table td {
-padding: 10px 8px;
-border-bottom: 1px solid rgba(46,50,72,0.5);
-vertical-align: middle;
+.add-item-btn{
+  width:100%;padding:11px;
+  border-radius:var(--rs);border:none;
+  background:var(--accent);
+  color:#000;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  cursor:pointer;transition:opacity 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  letter-spacing:0.05em;text-transform:uppercase;
 }
-.invoice-table tr:last-child td { border-bottom: none; }
-.item-name-cell { font-weight: 600; color: var(–text); }
-.item-mode-badge {
-font-size: 9px;
-font-weight: 700;
-padding: 2px 6px;
-border-radius: 20px;
-margin-left: 5px;
+.add-item-btn:hover{opacity:0.88;}
+
+.invoice-table{width:100%;border-collapse:collapse;font-size:12px;}
+.invoice-table th{
+  text-align:left;color:var(--text3);font-weight:700;
+  text-transform:uppercase;letter-spacing:0.08em;font-size:9px;
+  padding:6px 8px;border-bottom:1px solid var(--border);
+  font-family:'Syne',sans-serif;
 }
-.mode-safe { background: var(–green-bg); color: var(–green); }
-.mode-competitive { background: var(–yellow-bg); color: var(–yellow); }
-.mode-minimum { background: var(–red-bg); color: var(–red); }
-.del-btn {
-background: none;
-border: none;
-color: var(–muted);
-cursor: pointer;
-font-size: 14px;
-padding: 4px 6px;
-border-radius: 6px;
-transition: all 0.2s;
+.invoice-table td{
+  padding:10px 8px;border-bottom:1px solid var(--border);
+  vertical-align:middle;font-size:12px;
 }
-.del-btn:hover { background: var(–red-bg); color: var(–red); }
+.invoice-table tr:last-child td{border-bottom:none;}
+.item-name-cell{font-weight:700;color:var(--text);}
+.item-mode-badge{
+  font-size:8px;font-weight:700;padding:2px 6px;
+  border-radius:20px;margin-left:5px;
+  font-family:'Space Mono',monospace;
+}
+.mode-safe{background:var(--green-bg);color:var(--green);}
+.mode-competitive{background:var(--yellow-bg);color:var(--yellow);}
+.mode-minimum{background:var(--red-bg);color:var(--red);}
+.del-btn{
+  background:none;border:none;color:var(--text3);cursor:pointer;
+  font-size:12px;padding:4px 6px;border-radius:5px;transition:all 0.15s;
+}
+.del-btn:hover{background:var(--red-bg);color:var(--red);}
 
 /* ── INVOICE TOTALS ── */
-.invoice-totals {
-margin-top: 12px;
-padding-top: 12px;
-border-top: 1px solid var(–border);
+.invoice-totals{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.total-row{
+  display:flex;justify-content:space-between;
+  padding:5px 6px;font-size:12px;
 }
-.total-row {
-display: flex;
-justify-content: space-between;
-padding: 5px 8px;
-font-size: 13px;
+.total-row.grand{
+  margin-top:8px;padding:12px;
+  background:var(--accent-dim);
+  border-radius:var(--rs);
+  border:1px solid var(--accent-border);
+  font-size:15px;font-weight:700;
 }
-.total-row.grand {
-margin-top: 6px;
-padding: 10px 8px;
-background: rgba(108,99,255,0.08);
-border-radius: var(–radius-sm);
-border: 1px solid rgba(108,99,255,0.25);
-font-size: 16px;
-font-weight: 700;
-}
-.total-row.grand .tv { color: var(–accent2); font-family: ‘DM Mono’, monospace; }
-.total-row .tl { color: var(–muted); font-weight: 500; }
-.total-row .tv { font-family: ‘DM Mono’, monospace; font-weight: 600; }
-.profit-summary {
-display: flex;
-gap: 8px;
-margin-top: 10px;
-flex-wrap: wrap;
-}
-.ps-pill {
-flex: 1;
-min-width: 80px;
-background: var(–green-bg);
-border: 1px solid rgba(74,222,128,0.2);
-border-radius: var(–radius-sm);
-padding: 8px 10px;
-text-align: center;
-}
-.ps-pill .ps-val {
-font-family: ‘DM Mono’, monospace;
-font-size: 14px;
-font-weight: 700;
-color: var(–green);
-}
-.ps-pill .ps-label { font-size: 10px; color: var(–muted); margin-top: 2px; }
+.total-row.grand .tv{color:var(--accent);font-family:'Space Mono',monospace;}
+.total-row .tl{color:var(--text2);font-weight:600;}
+.total-row .tv{font-family:'Space Mono',monospace;font-weight:700;}
 
-/* ── PRINT BTN ── */
-.print-btn {
-width: 100%;
-padding: 12px;
-border-radius: var(–radius-sm);
-border: 1px solid var(–border);
-background: var(–surface2);
-color: var(–muted);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 13px;
-font-weight: 600;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 7px;
-transition: all 0.2s;
-margin-top: 10px;
+.profit-summary{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.ps-pill{
+  flex:1;min-width:80px;
+  background:var(--green-bg);
+  border:1px solid var(--green-border);
+  border-radius:var(--rs);padding:10px;text-align:center;
 }
-.print-btn:hover { border-color: var(–accent); color: var(–accent2); }
-.clear-btn {
-width: 100%;
-padding: 10px;
-border-radius: var(–radius-sm);
-border: 1px solid rgba(248,113,113,0.25);
-background: var(–red-bg);
-color: var(–red);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 12px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.2s;
-margin-top: 8px;
+.ps-pill .ps-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green);}
+.ps-pill .ps-label{font-size:9px;color:var(--text3);margin-top:3px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+
+/* ── BUTTONS ── */
+.print-btn{
+  width:100%;padding:12px;
+  border-radius:var(--rs);
+  border:1px solid var(--border2);
+  background:transparent;
+  color:var(--text2);
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:all 0.15s;margin-top:10px;letter-spacing:0.04em;text-transform:uppercase;
 }
+.print-btn:hover{border-color:var(--accent-border);color:var(--accent);}
+.clear-btn{
+  width:100%;padding:10px;
+  border-radius:var(--rs);
+  border:1px solid var(--red-border);
+  background:transparent;color:var(--red);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  cursor:pointer;transition:all 0.15s;margin-top:8px;
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+.clear-btn:hover{background:var(--red-bg);}
 
 /* ── SETTINGS ── */
-.settings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-.mini-field label { font-size: 11px; font-weight: 600; color: var(–muted); display: block; margin-bottom: 5px; }
-.profit-settings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.psg-item {
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: var(–radius-sm);
-padding: 10px;
+.psg-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:10px;
 }
-.psg-item label { font-size: 11px; font-weight: 700; display: block; margin-bottom: 6px; }
-.psg-item.safe label { color: var(–green); }
-.psg-item.competitive label { color: var(–yellow); }
-.psg-item.minimum label { color: var(–red); }
+.psg-item label{font-size:10px;font-weight:700;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;}
+.psg-item.safe label{color:var(--green);}
+.psg-item.competitive label{color:var(--yellow);}
+.psg-item.minimum label{color:var(--red);}
 
-/* ── PRICE REVISION ── */
-.revision-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-.rev-tile {
-background: var(–surface2);
-border-radius: var(–radius-sm);
-border: 1px solid var(–border);
-padding: 10px 12px;
+/* ── REVISION ── */
+.rev-tile{
+  background:var(--bg2);border-radius:var(--rs);
+  border:1px solid var(--border);padding:12px;
 }
-.rev-tile-label { font-size: 10px; color: var(–muted); font-weight: 600; margin-bottom: 4px; }
-.rev-tile-val { font-family: ‘DM Mono’, monospace; font-size: 15px; font-weight: 700; color: var(–text); }
+.rev-tile-label{font-size:10px;color:var(--text3);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em;}
+.rev-tile-val{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--text);}
+
+/* ── MISC ── */
+.warning-box{
+  background:rgba(255,179,0,0.05);
+  border:1px solid rgba(255,179,0,0.15);
+  border-radius:var(--rs);padding:9px 12px;
+  font-size:11px;color:var(--yellow);margin-top:10px;
+}
+.divider{height:1px;background:var(--border);margin:14px 0;}
+.badge-info{
+  background:var(--accent-dim);color:var(--accent);
+  font-size:9px;font-weight:700;padding:2px 8px;
+  border-radius:20px;border:1px solid var(--accent-border);
+  font-family:'Space Mono',monospace;
+}
 
 /* ── PRINT ── */
-@media print {
-header, .tabs, #tab-pricer, #tab-settings, #tab-revision, .add-item-btn, .print-btn, .clear-btn, .del-btn, .invoice-add-row, .profit-mode-row, .card-title { display: none !important; }
-body { background: #fff; color: #000; padding: 0; }
-#tab-invoice { display: block !important; padding: 20px; }
-.invoice-table th { color: #555; }
-.invoice-table td { color: #000; }
-.item-name-cell { color: #000; }
-.total-row .tl { color: #555; }
-.total-row.grand { background: #f5f5f5; }
-.total-row.grand .tv { color: #333; }
-.card { background: #fff; border: 1px solid #ddd; }
-.ps-pill { background: #f0fdf4; }
-.ps-pill .ps-val { color: #16a34a; }
-}
-
-.badge-info {
-background: rgba(108,99,255,0.12);
-color: var(–accent2);
-font-size: 10px;
-font-weight: 700;
-padding: 2px 8px;
-border-radius: 20px;
-border: 1px solid rgba(108,99,255,0.2);
-}
-
-.warning-box {
-background: rgba(251,191,36,0.07);
-border: 1px solid rgba(251,191,36,0.2);
-border-radius: var(–radius-sm);
-padding: 9px 12px;
-font-size: 11px;
-color: var(–yellow);
-margin-top: 10px;
-}
-
-.divider {
-height: 1px;
-background: var(–border);
-margin: 14px 0;
+@media print{
+  header,.tabs,#tab-pricer,#tab-settings,#tab-revision,
+  .add-item-btn,.print-btn,.clear-btn,.del-btn,
+  .invoice-add-row,.profit-mode-row,.card-title{display:none!important;}
+  body{background:#fff;color:#000;padding:0;}
+  #tab-invoice{display:block!important;padding:20px;}
+  .invoice-table th{color:#555;}
+  .invoice-table td{color:#000;border-color:#eee;}
+  .item-name-cell{color:#000;}
+  .total-row .tl{color:#555;}
+  .total-row.grand{background:#f8f8f8;border-color:#ddd;}
+  .total-row.grand .tv{color:#333;}
+  .card{background:#fff;border:1px solid #ddd;}
+  .ps-pill{background:#f0fdf4;border-color:#86efac;}
+  .ps-pill .ps-val{color:#16a34a;}
 }
 </style>
-
 </head>
 <body>
 
 <header>
-  <div class="logo-circle">JK</div>
+  <div class="logo">JK</div>
   <div class="header-text">
     <h1>Jay Kay Associates</h1>
     <p>Pricing Tool · വില കണക്കാക്കൽ</p>
   </div>
+  <div class="header-pill">v2.0</div>
 </header>
 
-<!-- TABS -->
-
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('pricer')">🧮 Pricer</button>
-  <button class="tab-btn" onclick="switchTab('invoice')">📋 Invoice</button>
-  <button class="tab-btn" onclick="switchTab('revision')">📈 Revision</button>
-  <button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button>
+  <button class="tab-btn active" onclick="switchTab('pricer',this)">Pricer</button>
+  <button class="tab-btn" onclick="switchTab('invoice',this)">Invoice</button>
+  <button class="tab-btn" onclick="switchTab('revision',this)">Revision</button>
+  <button class="tab-btn" onclick="switchTab('settings',this)">Settings</button>
 </div>
 
-<!-- ═══════════════ TAB: PRICER ═══════════════ -->
-
+<!-- ═══ TAB: PRICER ═══ -->
 <div class="tab-content active" id="tab-pricer">
 
-  <!-- Billing Type -->
-
   <div class="card">
-    <div class="card-title"><span>🧾</span> Billing Type</div>
+    <div class="card-title"><div class="ct-icon">🧾</div>Billing Type</div>
     <div class="toggle-row">
       <button class="toggle-btn active" id="btn-with-gst" onclick="setBilling('with')">With GST Bill</button>
       <button class="toggle-btn" id="btn-without-gst" onclick="setBilling('without')">Without Bill</button>
     </div>
   </div>
 
-  <!-- Purchase Details -->
-
   <div class="card">
-    <div class="card-title"><span>🛒</span> Purchase Details</div>
-
-```
-<div class="qty-row">
-  <div class="field">
-    <label>Purchase Rate (per unit) ₹</label>
-    <div class="input-wrap has-prefix">
-      <span class="input-prefix">₹</span>
-      <input type="number" id="purchase-rate" placeholder="0.00" oninput="calculate()" min="0" step="0.01"/>
+    <div class="card-title"><div class="ct-icon">🛒</div>Purchase Details</div>
+    <div class="qty-row">
+      <div class="field">
+        <label>Purchase Rate (per unit)</label>
+        <div class="input-wrap has-prefix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="purchase-rate" placeholder="0.00" oninput="calculate()" min="0" step="0.01"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Quantity</label>
+        <div class="input-wrap">
+          <input type="number" id="quantity" placeholder="1" value="1" oninput="calculate()" min="1" step="1"/>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Purchase Discount %</label>
+      <div class="input-wrap has-suffix">
+        <input type="number" id="purchase-discount" placeholder="0" oninput="calculate()" min="0" max="100" step="0.1"/>
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+    <div id="gst-warning" class="warning-box" style="display:none;">
+      ⚠️ Without Bill: GST on purchase becomes a loss — added to your cost automatically.
     </div>
   </div>
-  <div class="field">
-    <label>Quantity</label>
-    <div class="input-wrap">
-      <input type="number" id="quantity" placeholder="1" value="1" oninput="calculate()" min="1" step="1"/>
-    </div>
-  </div>
-</div>
-
-<div class="field">
-  <label>Purchase Discount % (if any)</label>
-  <div class="input-wrap has-suffix">
-    <input type="number" id="purchase-discount" placeholder="0" oninput="calculate()" min="0" max="100" step="0.1"/>
-    <span class="input-suffix">%</span>
-  </div>
-</div>
-
-<div id="gst-warning" class="warning-box" style="display:none;">
-  ⚠️ Without Bill: GST on purchase becomes a loss — added to your cost automatically.
-</div>
-```
-
-  </div>
-
-  <!-- Profit Mode Selector -->
 
   <div class="card">
-    <div class="card-title"><span>🎯</span> Select Profit Mode</div>
-    <div class="profit-mode-row">
+    <div class="card-title"><div class="ct-icon">🎯</div>Profit Mode</div>
+    <div class="profit-mode-row" style="margin-bottom:14px;">
       <button class="profit-mode-btn" data-mode="safe" onclick="setPricerMode('safe')">🟢 Safe</button>
       <button class="profit-mode-btn active" data-mode="competitive" onclick="setPricerMode('competitive')">🟡 Competitive</button>
       <button class="profit-mode-btn" data-mode="minimum" onclick="setPricerMode('minimum')">🔴 Minimum</button>
     </div>
-
-```
-<!-- True Cost -->
-<div class="result-row">
-  <span class="result-label">True Cost (per unit)</span>
-  <span class="result-value" id="true-cost">—</span>
-</div>
-<div class="result-row">
-  <span class="result-label">Total Cost (× qty)</span>
-  <span class="result-value" id="total-cost-qty">—</span>
-</div>
-```
-
+    <div style="display:flex;gap:8px;">
+      <div style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;">
+        <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">True Cost / unit</div>
+        <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--text);" id="true-cost">—</div>
+      </div>
+      <div style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;">
+        <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Total Cost × qty</div>
+        <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--text);" id="total-cost-qty">—</div>
+      </div>
+    </div>
   </div>
-
-  <!-- Results -->
 
   <div class="card" id="results-card">
-    <div class="card-title"><span>💡</span> Selected Mode Result</div>
+    <div class="card-title"><div class="ct-icon">💡</div>Selected Mode Result</div>
     <div id="selected-result-display">
-      <div class="empty-state">
-        <div class="icon">🧮</div>
-        Enter purchase rate to see pricing
-      </div>
+      <div class="empty-state"><div class="icon">🧮</div>Enter purchase rate to see pricing</div>
     </div>
   </div>
 
-  <!-- All Prices -->
-
   <div class="card">
-    <div class="card-title"><span>📊</span> All Price Options</div>
+    <div class="card-title"><div class="ct-icon">📊</div>All Price Options</div>
     <div class="price-cards" id="all-price-cards">
-      <div class="empty-state">
-        <div class="icon">📊</div>
-        Enter purchase rate above
-      </div>
+      <div class="empty-state"><div class="icon">📊</div>Enter purchase rate above</div>
     </div>
   </div>
 
 </div>
 
-<!-- ═══════════════ TAB: INVOICE ═══════════════ -->
-
+<!-- ═══ TAB: INVOICE ═══ -->
 <div class="tab-content" id="tab-invoice">
-
-  <!-- Add Item -->
-
   <div class="card">
-    <div class="card-title"><span>➕</span> Add Item</div>
+    <div class="card-title"><div class="ct-icon">➕</div>Add Item</div>
     <div class="invoice-add-row">
-
-```
-  <div class="field">
-    <label>Item / Product Name</label>
-    <input type="text" id="inv-item-name" placeholder="e.g. M8 Hex Bolt (Grade 8.8)"/>
-  </div>
-
-  <div class="item-details-row">
-    <div class="field">
-      <label>Purchase Rate ₹</label>
-      <div class="input-wrap has-prefix">
-        <span class="input-prefix">₹</span>
-        <input type="number" id="inv-purchase-rate" placeholder="0.00" oninput="calcInvoicePreview()" min="0" step="0.01"/>
+      <div class="field">
+        <label>Item / Product Name</label>
+        <input type="text" id="inv-item-name" placeholder="e.g. M8 Hex Bolt (Grade 8.8)"/>
       </div>
-    </div>
-    <div class="field">
-      <label>Discount %</label>
-      <div class="input-wrap has-suffix">
-        <input type="number" id="inv-discount" placeholder="0" oninput="calcInvoicePreview()" min="0" max="100"/>
-        <span class="input-suffix">%</span>
+      <div class="item-details-row">
+        <div class="field">
+          <label>Purchase Rate ₹</label>
+          <div class="input-wrap has-prefix">
+            <span class="input-prefix">₹</span>
+            <input type="number" id="inv-purchase-rate" placeholder="0.00" oninput="calcInvoicePreview()" min="0" step="0.01"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Discount %</label>
+          <div class="input-wrap has-suffix">
+            <input type="number" id="inv-discount" placeholder="0" oninput="calcInvoicePreview()" min="0" max="100"/>
+            <span class="input-suffix">%</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Quantity</label>
+          <input type="number" id="inv-qty" placeholder="1" value="1" oninput="calcInvoicePreview()" min="1"/>
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <label>Quantity</label>
-      <input type="number" id="inv-qty" placeholder="1" value="1" oninput="calcInvoicePreview()" min="1"/>
-    </div>
-  </div>
-
-  <!-- Profit Mode for invoice item -->
-  <div class="card-title" style="margin-bottom:8px;margin-top:4px;"><span>🎯</span> Profit Mode for this item</div>
-  <div class="profit-mode-row" style="margin-bottom:10px;">
-    <button class="profit-mode-btn" data-mode="safe" onclick="setInvMode('safe')">🟢 Safe</button>
-    <button class="profit-mode-btn active" data-mode="competitive" onclick="setInvMode('competitive')">🟡 Competitive</button>
-    <button class="profit-mode-btn" data-mode="minimum" onclick="setInvMode('minimum')">🔴 Min</button>
-  </div>
-
-  <!-- Preview -->
-  <div id="inv-preview" style="margin-bottom:10px; display:none;">
-    <div class="result-row">
-      <span class="result-label">Unit Selling Price</span>
-      <span class="result-value yellow" id="prev-unit-sell">—</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Line Total (qty × sell)</span>
-      <span class="result-value green" id="prev-line-total">—</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Line Profit</span>
-      <span class="result-value" id="prev-line-profit">—</span>
+      <div class="card-title" style="margin-bottom:8px;margin-top:4px;"><div class="ct-icon">🎯</div>Profit Mode</div>
+      <div class="profit-mode-row" style="margin-bottom:10px;">
+        <button class="profit-mode-btn" data-mode="safe" onclick="setInvMode('safe')">🟢 Safe</button>
+        <button class="profit-mode-btn active" data-mode="competitive" onclick="setInvMode('competitive')">🟡 Competitive</button>
+        <button class="profit-mode-btn" data-mode="minimum" onclick="setInvMode('minimum')">🔴 Min</button>
+      </div>
+      <div id="inv-preview" style="margin-bottom:10px;display:none;background:var(--bg3);border-radius:var(--rs);border:1px solid var(--border);padding:10px;">
+        <div class="result-row">
+          <span class="result-label">Unit Selling Price</span>
+          <span class="result-value yellow" id="prev-unit-sell">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Line Total (qty × sell)</span>
+          <span class="result-value green" id="prev-line-total">—</span>
+        </div>
+        <div class="result-row" style="border:none;">
+          <span class="result-label">Line Profit</span>
+          <span class="result-value green" id="prev-line-profit">—</span>
+        </div>
+      </div>
+      <button class="add-item-btn" onclick="addInvoiceItem()">+ Add to Invoice</button>
     </div>
   </div>
-
-  <button class="add-item-btn" onclick="addInvoiceItem()">➕ Add to Invoice</button>
-</div>
-```
-
-  </div>
-
-  <!-- Invoice List -->
 
   <div class="card" id="invoice-list-card">
     <div class="card-title">
-      <span>📋</span> Invoice Items
+      <div class="ct-icon">📋</div>Invoice Items
       <span id="item-count-badge" class="badge-info" style="display:none;">0 items</span>
     </div>
-    <div id="invoice-empty" class="empty-state">
-      <div class="icon">📋</div>
-      No items added yet
-    </div>
-    <div id="invoice-table-wrap" style="display:none; overflow-x:auto;">
+    <div id="invoice-empty" class="empty-state"><div class="icon">📋</div>No items added yet</div>
+    <div id="invoice-table-wrap" style="display:none;overflow-x:auto;">
       <table class="invoice-table">
         <thead>
-          <tr>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Unit ₹</th>
-            <th>Total ₹</th>
-            <th>Profit ₹</th>
-            <th></th>
-          </tr>
+          <tr><th>Item</th><th>Qty</th><th>Unit ₹</th><th>Total ₹</th><th>Profit ₹</th><th></th></tr>
         </thead>
         <tbody id="invoice-tbody"></tbody>
       </table>
       <div class="invoice-totals">
-        <div class="total-row">
-          <span class="tl">Total Cost</span>
-          <span class="tv" id="inv-total-cost">₹0.00</span>
-        </div>
-        <div class="total-row">
-          <span class="tl">Total Revenue</span>
-          <span class="tv" id="inv-total-revenue">₹0.00</span>
-        </div>
-        <div class="total-row grand">
-          <span class="tl">Grand Total</span>
-          <span class="tv" id="inv-grand-total">₹0.00</span>
-        </div>
+        <div class="total-row"><span class="tl">Total Cost</span><span class="tv" id="inv-total-cost">₹0.00</span></div>
+        <div class="total-row"><span class="tl">Total Revenue</span><span class="tv" id="inv-total-revenue">₹0.00</span></div>
+        <div class="total-row grand"><span class="tl">Grand Total</span><span class="tv" id="inv-grand-total">₹0.00</span></div>
         <div class="profit-summary">
-          <div class="ps-pill">
-            <div class="ps-val" id="inv-total-profit">₹0</div>
-            <div class="ps-label">Total Profit</div>
-          </div>
-          <div class="ps-pill">
-            <div class="ps-val" id="inv-avg-margin">0%</div>
-            <div class="ps-label">Avg Margin</div>
-          </div>
-          <div class="ps-pill">
-            <div class="ps-val" id="inv-item-count">0</div>
-            <div class="ps-label">Items</div>
-          </div>
+          <div class="ps-pill"><div class="ps-val" id="inv-total-profit">₹0</div><div class="ps-label">Total Profit</div></div>
+          <div class="ps-pill"><div class="ps-val" id="inv-avg-margin">0%</div><div class="ps-label">Avg Margin</div></div>
+          <div class="ps-pill"><div class="ps-val" id="inv-item-count">0</div><div class="ps-label">Items</div></div>
         </div>
       </div>
     </div>
-
-```
-<button class="print-btn" onclick="window.print()" id="print-btn" style="display:none;">🖨️ Print / Save as PDF</button>
-<button class="clear-btn" onclick="clearInvoice()" id="clear-inv-btn" style="display:none;">🗑️ Clear Invoice</button>
-```
-
+    <button class="print-btn" onclick="window.print()" id="print-btn" style="display:none;">🖨 Print / Save as PDF</button>
+    <button class="clear-btn" onclick="clearInvoice()" id="clear-inv-btn" style="display:none;">🗑 Clear All Items</button>
   </div>
-
 </div>
 
-<!-- ═══════════════ TAB: REVISION ═══════════════ -->
-
+<!-- ═══ TAB: REVISION ═══ -->
 <div class="tab-content" id="tab-revision">
   <div class="card">
-    <div class="card-title"><span>📈</span> Price Revision Calculator</div>
-
-```
-<div class="qty-row">
-  <div class="field">
-    <label>Old Purchase Rate ₹</label>
-    <div class="input-wrap has-prefix">
-      <span class="input-prefix">₹</span>
-      <input type="number" id="rev-old-rate" placeholder="0.00" oninput="calcRevision()" min="0" step="0.01"/>
+    <div class="card-title"><div class="ct-icon">📈</div>Price Revision Calculator</div>
+    <div class="qty-row">
+      <div class="field">
+        <label>Old Purchase Rate ₹</label>
+        <div class="input-wrap has-prefix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="rev-old-rate" placeholder="0.00" oninput="calcRevision()" min="0" step="0.01"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Price Increase %</label>
+        <div class="input-wrap has-suffix">
+          <input type="number" id="rev-increase" placeholder="0" oninput="calcRevision()" min="0" step="0.1"/>
+          <span class="input-suffix">%</span>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="field">
-    <label>Price Increase %</label>
-    <div class="input-wrap has-suffix">
-      <input type="number" id="rev-increase" placeholder="0" oninput="calcRevision()" min="0" step="0.1"/>
-      <span class="input-suffix">%</span>
-    </div>
-  </div>
-</div>
-
-<div id="rev-results" style="display:none;">
-  <div class="divider"></div>
-  <div class="result-row">
-    <span class="result-label">New Purchase Cost</span>
-    <span class="result-value" id="rev-new-cost">—</span>
-  </div>
-  <div class="result-row">
-    <span class="result-label">Price Increase Amount</span>
-    <span class="result-value red" id="rev-diff">—</span>
-  </div>
-  <div class="revision-result-grid">
-    <div class="rev-tile">
-      <div class="rev-tile-label">🟢 Safe Price</div>
-      <div class="rev-tile-val" id="rev-safe">—</div>
-    </div>
-    <div class="rev-tile">
-      <div class="rev-tile-label">🟡 Competitive</div>
-      <div class="rev-tile-val" id="rev-comp">—</div>
-    </div>
-    <div class="rev-tile">
-      <div class="rev-tile-label">🔴 Minimum</div>
-      <div class="rev-tile-val" id="rev-min">—</div>
-    </div>
-    <div class="rev-tile">
-      <div class="rev-tile-label">📊 Old Safe Price</div>
-      <div class="rev-tile-val" id="rev-old-safe">—</div>
+    <div id="rev-results" style="display:none;">
+      <div class="divider"></div>
+      <div class="result-row"><span class="result-label">New Purchase Cost</span><span class="result-value" id="rev-new-cost">—</span></div>
+      <div class="result-row"><span class="result-label">Increase Amount</span><span class="result-value red" id="rev-diff">—</span></div>
+      <div class="revision-result-grid">
+        <div class="rev-tile"><div class="rev-tile-label">🟢 Safe Price</div><div class="rev-tile-val" id="rev-safe">—</div></div>
+        <div class="rev-tile"><div class="rev-tile-label">🟡 Competitive</div><div class="rev-tile-val" id="rev-comp">—</div></div>
+        <div class="rev-tile"><div class="rev-tile-label">🔴 Minimum</div><div class="rev-tile-val" id="rev-min">—</div></div>
+        <div class="rev-tile"><div class="rev-tile-label">📊 Old Safe Price</div><div class="rev-tile-val" id="rev-old-safe">—</div></div>
+      </div>
     </div>
   </div>
 </div>
-```
 
-  </div>
-</div>
-
-<!-- ═══════════════ TAB: SETTINGS ═══════════════ -->
-
+<!-- ═══ TAB: SETTINGS ═══ -->
 <div class="tab-content" id="tab-settings">
   <div class="card">
-    <div class="card-title"><span>💰</span> Profit % Settings</div>
+    <div class="card-title"><div class="ct-icon">💰</div>Profit % Settings</div>
     <div class="profit-settings-grid">
       <div class="psg-item safe">
         <label>🟢 Safe %</label>
@@ -854,336 +676,256 @@ margin: 14px 0;
       </div>
     </div>
   </div>
-
   <div class="card">
-    <div class="card-title"><span>⚙️</span> Other Settings</div>
+    <div class="card-title"><div class="ct-icon">⚙️</div>Other Settings</div>
     <div class="settings-grid">
-      <div class="mini-field">
+      <div class="field">
         <label>GST %</label>
-        <input type="number" id="set-gst" value="18" oninput="saveSettings(); calculate()" min="0" max="100"/>
+        <input type="number" id="set-gst" value="18" oninput="saveSettings();calculate()" min="0" max="100"/>
       </div>
-      <div class="mini-field">
+      <div class="field">
         <label>Overhead %</label>
-        <input type="number" id="set-overhead" value="7" oninput="saveSettings(); calculate()" min="0" max="100"/>
+        <input type="number" id="set-overhead" value="7" oninput="saveSettings();calculate()" min="0" max="100"/>
       </div>
     </div>
-    <div class="warning-box" style="margin-top:10px;">
-      ℹ️ Overhead default is 7%. This covers transport, storage, and operating expenses.
-    </div>
+    <div class="warning-box">ℹ️ Overhead default is 7%. Covers transport, storage, and operating expenses.</div>
   </div>
 </div>
 
 <script>
-// ─── STATE ───────────────────────────────
-let billingType = 'with'; // 'with' | 'without'
-let pricerMode = 'competitive';
-let invMode = 'competitive';
-let invoiceItems = [];
+let billingType='with';
+let pricerMode='competitive';
+let invMode='competitive';
+let invoiceItems=[];
 
-// ─── HELPERS ─────────────────────────────
-const fmt = v => v === null || isNaN(v) ? '—' : '₹' + parseFloat(v).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-const pct = v => v === null || isNaN(v) ? '—' : parseFloat(v).toFixed(1) + '%';
+const fmt=v=>v===null||isNaN(v)?'—':'₹'+parseFloat(v).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=v=>v===null||isNaN(v)?'—':parseFloat(v).toFixed(1)+'%';
 
-function getSettings() {
-  return {
-    safe: parseFloat(document.getElementById('set-safe').value) || 25,
-    competitive: parseFloat(document.getElementById('set-competitive').value) || 15,
-    minimum: parseFloat(document.getElementById('set-minimum').value) || 8,
-    gst: parseFloat(document.getElementById('set-gst').value) || 18,
-    overhead: parseFloat(document.getElementById('set-overhead').value) || 7
+function getSettings(){
+  return{
+    safe:parseFloat(document.getElementById('set-safe').value)||25,
+    competitive:parseFloat(document.getElementById('set-competitive').value)||15,
+    minimum:parseFloat(document.getElementById('set-minimum').value)||8,
+    gst:parseFloat(document.getElementById('set-gst').value)||18,
+    overhead:parseFloat(document.getElementById('set-overhead').value)||7
   };
 }
 
-function computeTrueCost(purchaseRate, discountPct, s) {
-  if (!purchaseRate || purchaseRate <= 0) return null;
-  const afterDiscount = purchaseRate * (1 - discountPct / 100);
-  let gstLoss = 0;
-  if (billingType === 'without') {
-    gstLoss = afterDiscount * (s.gst / 100);
-  }
-  const withGstLoss = afterDiscount + gstLoss;
-  const trueCost = withGstLoss * (1 + s.overhead / 100);
-  return trueCost;
+function computeTrueCost(purchaseRate,discountPct,s){
+  if(!purchaseRate||purchaseRate<=0)return null;
+  const afterDiscount=purchaseRate*(1-discountPct/100);
+  let gstLoss=0;
+  if(billingType==='without')gstLoss=afterDiscount*(s.gst/100);
+  const withGstLoss=afterDiscount+gstLoss;
+  return withGstLoss*(1+s.overhead/100);
 }
 
-function computeSellPrice(trueCost, profitPct) {
-  return trueCost * (1 + profitPct / 100);
+function computeSellPrice(trueCost,profitPct){return trueCost*(1+profitPct/100);}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
 }
 
-// ─── TABS ────────────────────────────────
-function switchTab(name) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// ─── BILLING ─────────────────────────────
-function setBilling(type) {
-  billingType = type;
-  document.getElementById('btn-with-gst').classList.toggle('active', type === 'with');
-  document.getElementById('btn-without-gst').classList.toggle('active', type === 'without');
-  document.getElementById('gst-warning').style.display = type === 'without' ? 'block' : 'none';
+function setBilling(type){
+  billingType=type;
+  document.getElementById('btn-with-gst').classList.toggle('active',type==='with');
+  document.getElementById('btn-without-gst').classList.toggle('active',type==='without');
+  document.getElementById('gst-warning').style.display=type==='without'?'block':'none';
   calculate();
 }
 
-// ─── PRICER MODE ─────────────────────────
-function setPricerMode(mode) {
-  pricerMode = mode;
-  document.querySelectorAll('#tab-pricer .profit-mode-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
+function setPricerMode(mode){
+  pricerMode=mode;
+  document.querySelectorAll('#tab-pricer .profit-mode-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.mode===mode);
   });
   calculate();
 }
 
-// ─── MAIN CALCULATE ──────────────────────
-function calculate() {
-  const s = getSettings();
-  const rate = parseFloat(document.getElementById('purchase-rate').value);
-  const disc = parseFloat(document.getElementById('purchase-discount').value) || 0;
-  const qty = parseInt(document.getElementById('quantity').value) || 1;
+function calculate(){
+  const s=getSettings();
+  const rate=parseFloat(document.getElementById('purchase-rate').value);
+  const disc=parseFloat(document.getElementById('purchase-discount').value)||0;
+  const qty=parseInt(document.getElementById('quantity').value)||1;
+  const trueCost=computeTrueCost(rate,disc,s);
 
-  const trueCost = computeTrueCost(rate, disc, s);
+  document.getElementById('true-cost').textContent=trueCost?fmt(trueCost):'—';
+  document.getElementById('total-cost-qty').textContent=trueCost?fmt(trueCost*qty):'—';
 
-  document.getElementById('true-cost').textContent = trueCost ? fmt(trueCost) : '—';
-  document.getElementById('total-cost-qty').textContent = trueCost ? fmt(trueCost * qty) : '—';
-
-  // Selected mode
-  if (!trueCost) {
-    document.getElementById('selected-result-display').innerHTML = `<div class="empty-state"><div class="icon">🧮</div>Enter purchase rate to see pricing</div>`;
-    document.getElementById('all-price-cards').innerHTML = `<div class="empty-state"><div class="icon">📊</div>Enter purchase rate above</div>`;
+  if(!trueCost){
+    document.getElementById('selected-result-display').innerHTML='<div class="empty-state"><div class="icon">🧮</div>Enter purchase rate to see pricing</div>';
+    document.getElementById('all-price-cards').innerHTML='<div class="empty-state"><div class="icon">📊</div>Enter purchase rate above</div>';
     return;
   }
 
-  const modes = ['safe', 'competitive', 'minimum'];
-  const labels = {safe: 'Safe', competitive: 'Competitive', minimum: 'Minimum'};
-  const profitPcts = {safe: s.safe, competitive: s.competitive, minimum: s.minimum};
-  const colorClass = {safe: 'green', competitive: 'yellow', minimum: 'red'};
+  const modes=['safe','competitive','minimum'];
+  const profitPcts={safe:s.safe,competitive:s.competitive,minimum:s.minimum};
+  const colorClass={safe:'green',competitive:'yellow',minimum:'red'};
+  const pm=pricerMode;
+  const pp=profitPcts[pm];
+  const sp=computeSellPrice(trueCost,pp);
+  const profitAmt=sp-trueCost;
+  const maxDiscount=((sp-trueCost)/sp)*100;
+  const lineTotal=sp*qty;
+  const lineTotalProfit=profitAmt*qty;
 
-  // Selected mode panel
-  const pm = pricerMode;
-  const pp = profitPcts[pm];
-  const sp = computeSellPrice(trueCost, pp);
-  const profitAmt = sp - trueCost;
-  const maxDiscount = ((sp - trueCost) / sp) * 100;
-  const lineTotal = sp * qty;
-  const lineTotalProfit = profitAmt * qty;
+  document.getElementById('selected-result-display').innerHTML=`
+    <div class="selected-result-box">
+      <div class="srb-amount">${fmt(sp)}</div>
+      <div class="srb-label">Selling Price · ${pm} mode (${pp}%)</div>
+      <div class="srb-rows">
+        <div class="result-row"><span class="result-label">Line Total × ${qty}</span><span class="result-value ${colorClass[pm]}">${fmt(lineTotal)}</span></div>
+        <div class="result-row"><span class="result-label">Profit per unit</span><span class="result-value green">${fmt(profitAmt)}</span></div>
+        <div class="result-row"><span class="result-label">Total Profit × ${qty}</span><span class="result-value green">${fmt(lineTotalProfit)}</span></div>
+        <div class="result-row" style="border:none;"><span class="result-label">Max Discount you can give</span><span class="result-value">${pct(maxDiscount)}</span></div>
+      </div>
+    </div>`;
 
-  document.getElementById('selected-result-display').innerHTML = `
-    <div class="result-row">
-      <span class="result-label">Selling Price (per unit)</span>
-      <span class="result-value ${colorClass[pm]}" style="font-size:20px;font-weight:700;">${fmt(sp)}</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Line Total (× ${qty})</span>
-      <span class="result-value ${colorClass[pm]}">${fmt(lineTotal)}</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Profit per unit</span>
-      <span class="result-value">${fmt(profitAmt)} (${pp}%)</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Total Profit (× ${qty})</span>
-      <span class="result-value green">${fmt(lineTotalProfit)}</span>
-    </div>
-    <div class="result-row">
-      <span class="result-label">Max Discount you can give</span>
-      <span class="result-value">${pct(maxDiscount)}</span>
-    </div>
-  `;
-
-  // All price cards
-  const cardsHTML = modes.map(mode => {
-    const mpct = profitPcts[mode];
-    const msp = computeSellPrice(trueCost, mpct);
-    const mProfit = msp - trueCost;
-    const mMaxDisc = ((msp - trueCost) / msp) * 100;
-    const mLine = msp * qty;
-    const isActive = mode === pricerMode;
-    const badgeText = {safe: '✓ RECOMMENDED', competitive: '⚡ COMPETITIVE', minimum: '⛔ DO NOT GO BELOW'};
-    return `
-      <div class="price-card ${mode} ${isActive ? 'highlighted' : ''}">
-        <div class="pc-header">
-          <span class="pc-badge">${badgeText[mode]}</span>
-          <span class="pc-profit-tag">${mpct}% profit</span>
-        </div>
-        <div class="pc-price">${fmt(msp)}<span class="unit">/ unit</span></div>
-        <div class="pc-details">
-          <span class="pc-detail">Line total: <strong>${fmt(mLine)}</strong></span>
-          <span class="pc-detail">Profit: <strong>${fmt(mProfit)}</strong></span>
-          <span class="pc-detail">Max disc: <strong>${pct(mMaxDisc)}</strong></span>
-        </div>
-      </div>`;
+  const badgeText={safe:'✓ RECOMMENDED',competitive:'⚡ COMPETITIVE',minimum:'⛔ FLOOR PRICE'};
+  const cardsHTML=modes.map(mode=>{
+    const mpct=profitPcts[mode];
+    const msp=computeSellPrice(trueCost,mpct);
+    const mProfit=msp-trueCost;
+    const mMaxDisc=((msp-trueCost)/msp)*100;
+    const mLine=msp*qty;
+    const isActive=mode===pricerMode;
+    return`<div class="price-card ${mode}${isActive?' highlighted':''}">
+      <div class="pc-header">
+        <span class="pc-badge">${badgeText[mode]}</span>
+        <span class="pc-profit-tag">${mpct}%</span>
+      </div>
+      <div class="pc-price">${fmt(msp)}<span class="unit">/ unit</span></div>
+      <div class="pc-details">
+        <span class="pc-detail">Line: <strong>${fmt(mLine)}</strong></span>
+        <span class="pc-detail">Profit: <strong>${fmt(mProfit)}</strong></span>
+        <span class="pc-detail">Max disc: <strong>${pct(mMaxDisc)}</strong></span>
+      </div>
+    </div>`;
   });
-  document.getElementById('all-price-cards').innerHTML = cardsHTML.join('');
+  document.getElementById('all-price-cards').innerHTML=cardsHTML.join('');
 }
 
-// ─── INVOICE MODE ─────────────────────────
-function setInvMode(mode) {
-  invMode = mode;
-  document.querySelectorAll('#tab-invoice .profit-mode-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === mode);
+function setInvMode(mode){
+  invMode=mode;
+  document.querySelectorAll('#tab-invoice .profit-mode-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.mode===mode);
   });
   calcInvoicePreview();
 }
 
-function calcInvoicePreview() {
-  const s = getSettings();
-  const rate = parseFloat(document.getElementById('inv-purchase-rate').value);
-  const disc = parseFloat(document.getElementById('inv-discount').value) || 0;
-  const qty = parseInt(document.getElementById('inv-qty').value) || 1;
-  const prev = document.getElementById('inv-preview');
-
-  if (!rate || rate <= 0) { prev.style.display = 'none'; return; }
-
-  const trueCost = computeTrueCost(rate, disc, s);
-  const profitPcts = {safe: s.safe, competitive: s.competitive, minimum: s.minimum};
-  const sp = computeSellPrice(trueCost, profitPcts[invMode]);
-  const lineTotal = sp * qty;
-  const lineCost = trueCost * qty;
-  const lineProfit = lineTotal - lineCost;
-
-  document.getElementById('prev-unit-sell').textContent = fmt(sp);
-  document.getElementById('prev-line-total').textContent = fmt(lineTotal);
-  document.getElementById('prev-line-profit').textContent = fmt(lineProfit);
-  prev.style.display = 'block';
+function calcInvoicePreview(){
+  const s=getSettings();
+  const rate=parseFloat(document.getElementById('inv-purchase-rate').value);
+  const disc=parseFloat(document.getElementById('inv-discount').value)||0;
+  const qty=parseInt(document.getElementById('inv-qty').value)||1;
+  const prev=document.getElementById('inv-preview');
+  if(!rate||rate<=0){prev.style.display='none';return;}
+  const trueCost=computeTrueCost(rate,disc,s);
+  const profitPcts={safe:s.safe,competitive:s.competitive,minimum:s.minimum};
+  const sp=computeSellPrice(trueCost,profitPcts[invMode]);
+  const lineTotal=sp*qty;
+  const lineCost=trueCost*qty;
+  const lineProfit=lineTotal-lineCost;
+  document.getElementById('prev-unit-sell').textContent=fmt(sp);
+  document.getElementById('prev-line-total').textContent=fmt(lineTotal);
+  document.getElementById('prev-line-profit').textContent=fmt(lineProfit);
+  prev.style.display='block';
 }
 
-function addInvoiceItem() {
-  const s = getSettings();
-  const name = document.getElementById('inv-item-name').value.trim() || 'Unnamed Item';
-  const rate = parseFloat(document.getElementById('inv-purchase-rate').value);
-  const disc = parseFloat(document.getElementById('inv-discount').value) || 0;
-  const qty = parseInt(document.getElementById('inv-qty').value) || 1;
-
-  if (!rate || rate <= 0) {
-    alert('Please enter a purchase rate.');
-    return;
-  }
-
-  const trueCost = computeTrueCost(rate, disc, s);
-  const profitPcts = {safe: s.safe, competitive: s.competitive, minimum: s.minimum};
-  const sp = computeSellPrice(trueCost, profitPcts[invMode]);
-  const lineTotal = sp * qty;
-  const lineCost = trueCost * qty;
-  const lineProfit = lineTotal - lineCost;
-
-  invoiceItems.push({
-    id: Date.now(),
-    name, qty, rate, disc, mode: invMode,
-    trueCost, sp, lineTotal, lineCost, lineProfit
-  });
-
-  // Reset form
-  document.getElementById('inv-item-name').value = '';
-  document.getElementById('inv-purchase-rate').value = '';
-  document.getElementById('inv-discount').value = '';
-  document.getElementById('inv-qty').value = '1';
-  document.getElementById('inv-preview').style.display = 'none';
-
+function addInvoiceItem(){
+  const s=getSettings();
+  const name=document.getElementById('inv-item-name').value.trim()||'Unnamed Item';
+  const rate=parseFloat(document.getElementById('inv-purchase-rate').value);
+  const disc=parseFloat(document.getElementById('inv-discount').value)||0;
+  const qty=parseInt(document.getElementById('inv-qty').value)||1;
+  if(!rate||rate<=0){alert('Please enter a purchase rate.');return;}
+  const trueCost=computeTrueCost(rate,disc,s);
+  const profitPcts={safe:s.safe,competitive:s.competitive,minimum:s.minimum};
+  const sp=computeSellPrice(trueCost,profitPcts[invMode]);
+  const lineTotal=sp*qty;
+  const lineCost=trueCost*qty;
+  const lineProfit=lineTotal-lineCost;
+  invoiceItems.push({id:Date.now(),name,qty,rate,disc,mode:invMode,trueCost,sp,lineTotal,lineCost,lineProfit});
+  document.getElementById('inv-item-name').value='';
+  document.getElementById('inv-purchase-rate').value='';
+  document.getElementById('inv-discount').value='';
+  document.getElementById('inv-qty').value='1';
+  document.getElementById('inv-preview').style.display='none';
   renderInvoice();
 }
 
-function removeItem(id) {
-  invoiceItems = invoiceItems.filter(i => i.id !== id);
+function removeItem(id){
+  invoiceItems=invoiceItems.filter(i=>i.id!==id);
   renderInvoice();
 }
 
-function renderInvoice() {
-  const tbody = document.getElementById('invoice-tbody');
-  const empty = document.getElementById('invoice-empty');
-  const tableWrap = document.getElementById('invoice-table-wrap');
-  const printBtn = document.getElementById('print-btn');
-  const clearBtn = document.getElementById('clear-inv-btn');
-  const badge = document.getElementById('item-count-badge');
-
-  if (invoiceItems.length === 0) {
-    empty.style.display = 'block';
-    tableWrap.style.display = 'none';
-    printBtn.style.display = 'none';
-    clearBtn.style.display = 'none';
-    badge.style.display = 'none';
-    return;
+function renderInvoice(){
+  const tbody=document.getElementById('invoice-tbody');
+  const empty=document.getElementById('invoice-empty');
+  const tableWrap=document.getElementById('invoice-table-wrap');
+  const printBtn=document.getElementById('print-btn');
+  const clearBtn=document.getElementById('clear-inv-btn');
+  const badge=document.getElementById('item-count-badge');
+  if(invoiceItems.length===0){
+    empty.style.display='block';tableWrap.style.display='none';
+    printBtn.style.display='none';clearBtn.style.display='none';badge.style.display='none';return;
   }
-
-  empty.style.display = 'none';
-  tableWrap.style.display = 'block';
-  printBtn.style.display = 'flex';
-  clearBtn.style.display = 'block';
-  badge.style.display = 'inline-block';
-  badge.textContent = invoiceItems.length + ' item' + (invoiceItems.length > 1 ? 's' : '');
-
-  const modeBadge = {safe:'mode-safe',competitive:'mode-competitive',minimum:'mode-minimum'};
-  const modeLabel = {safe:'Safe',competitive:'Comp',minimum:'Min'};
-
-  tbody.innerHTML = invoiceItems.map(item => `
+  empty.style.display='none';tableWrap.style.display='block';
+  printBtn.style.display='flex';clearBtn.style.display='block';
+  badge.style.display='inline-block';
+  badge.textContent=invoiceItems.length+' item'+(invoiceItems.length>1?'s':'');
+  const modeBadge={safe:'mode-safe',competitive:'mode-competitive',minimum:'mode-minimum'};
+  const modeLabel={safe:'Safe',competitive:'Comp',minimum:'Min'};
+  tbody.innerHTML=invoiceItems.map(item=>`
     <tr>
-      <td class="item-name-cell">
-        ${item.name}
-        <span class="item-mode-badge ${modeBadge[item.mode]}">${modeLabel[item.mode]}</span>
-      </td>
-      <td>${item.qty}</td>
-      <td>${fmt(item.sp)}</td>
-      <td>${fmt(item.lineTotal)}</td>
-      <td style="color:var(--green)">${fmt(item.lineProfit)}</td>
-      <td><button class="del-btn" onclick="removeItem(${item.id})">🗑️</button></td>
-    </tr>
-  `).join('');
-
-  const totalCost = invoiceItems.reduce((s, i) => s + i.lineCost, 0);
-  const totalRevenue = invoiceItems.reduce((s, i) => s + i.lineTotal, 0);
-  const totalProfit = totalRevenue - totalCost;
-  const avgMargin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
-  const totalQty = invoiceItems.reduce((s, i) => s + i.qty, 0);
-
-  document.getElementById('inv-total-cost').textContent = fmt(totalCost);
-  document.getElementById('inv-total-revenue').textContent = fmt(totalRevenue);
-  document.getElementById('inv-grand-total').textContent = fmt(totalRevenue);
-  document.getElementById('inv-total-profit').textContent = fmt(totalProfit);
-  document.getElementById('inv-avg-margin').textContent = pct(avgMargin);
-  document.getElementById('inv-item-count').textContent = totalQty;
+      <td class="item-name-cell">${item.name}<span class="item-mode-badge ${modeBadge[item.mode]}">${modeLabel[item.mode]}</span></td>
+      <td style="font-family:'Space Mono',monospace;">${item.qty}</td>
+      <td style="font-family:'Space Mono',monospace;">${fmt(item.sp)}</td>
+      <td style="font-family:'Space Mono',monospace;">${fmt(item.lineTotal)}</td>
+      <td style="font-family:'Space Mono',monospace;color:var(--green)">${fmt(item.lineProfit)}</td>
+      <td><button class="del-btn" onclick="removeItem(${item.id})">✕</button></td>
+    </tr>`).join('');
+  const totalCost=invoiceItems.reduce((s,i)=>s+i.lineCost,0);
+  const totalRevenue=invoiceItems.reduce((s,i)=>s+i.lineTotal,0);
+  const totalProfit=totalRevenue-totalCost;
+  const avgMargin=totalRevenue>0?(totalProfit/totalRevenue)*100:0;
+  const totalQty=invoiceItems.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('inv-total-cost').textContent=fmt(totalCost);
+  document.getElementById('inv-total-revenue').textContent=fmt(totalRevenue);
+  document.getElementById('inv-grand-total').textContent=fmt(totalRevenue);
+  document.getElementById('inv-total-profit').textContent=fmt(totalProfit);
+  document.getElementById('inv-avg-margin').textContent=pct(avgMargin);
+  document.getElementById('inv-item-count').textContent=totalQty;
 }
 
-function clearInvoice() {
-  if (confirm('Clear all invoice items?')) {
-    invoiceItems = [];
-    renderInvoice();
-  }
+function clearInvoice(){
+  if(confirm('Clear all invoice items?')){invoiceItems=[];renderInvoice();}
 }
 
-// ─── REVISION ────────────────────────────
-function calcRevision() {
-  const s = getSettings();
-  const oldRate = parseFloat(document.getElementById('rev-old-rate').value);
-  const increase = parseFloat(document.getElementById('rev-increase').value);
-  const revResults = document.getElementById('rev-results');
-
-  if (!oldRate || oldRate <= 0 || isNaN(increase)) { revResults.style.display = 'none'; return; }
-
-  const newCost = oldRate * (1 + increase / 100);
-  const diff = newCost - oldRate;
-
-  const trueCostOld = computeTrueCost(oldRate, 0, s);
-  const trueCostNew = computeTrueCost(newCost, 0, s);
-
-  revResults.style.display = 'block';
-  document.getElementById('rev-new-cost').textContent = fmt(newCost);
-  document.getElementById('rev-diff').textContent = fmt(diff);
-  document.getElementById('rev-safe').textContent = fmt(computeSellPrice(trueCostNew, s.safe));
-  document.getElementById('rev-comp').textContent = fmt(computeSellPrice(trueCostNew, s.competitive));
-  document.getElementById('rev-min').textContent = fmt(computeSellPrice(trueCostNew, s.minimum));
-  document.getElementById('rev-old-safe').textContent = fmt(computeSellPrice(trueCostOld, s.safe));
+function calcRevision(){
+  const s=getSettings();
+  const oldRate=parseFloat(document.getElementById('rev-old-rate').value);
+  const increase=parseFloat(document.getElementById('rev-increase').value);
+  const revResults=document.getElementById('rev-results');
+  if(!oldRate||oldRate<=0||isNaN(increase)){revResults.style.display='none';return;}
+  const newCost=oldRate*(1+increase/100);
+  const diff=newCost-oldRate;
+  const trueCostOld=computeTrueCost(oldRate,0,s);
+  const trueCostNew=computeTrueCost(newCost,0,s);
+  revResults.style.display='block';
+  document.getElementById('rev-new-cost').textContent=fmt(newCost);
+  document.getElementById('rev-diff').textContent=fmt(diff);
+  document.getElementById('rev-safe').textContent=fmt(computeSellPrice(trueCostNew,s.safe));
+  document.getElementById('rev-comp').textContent=fmt(computeSellPrice(trueCostNew,s.competitive));
+  document.getElementById('rev-min').textContent=fmt(computeSellPrice(trueCostNew,s.minimum));
+  document.getElementById('rev-old-safe').textContent=fmt(computeSellPrice(trueCostOld,s.safe));
 }
 
-function saveSettings() {
-  calculate();
-  calcRevision();
-  calcInvoicePreview();
-}
-
-// ─── INIT ─────────────────────────────────
+function saveSettings(){calculate();calcRevision();calcInvoicePreview();}
 calculate();
 </script>
-
 </body>
 </html>

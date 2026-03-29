@@ -433,7 +433,7 @@ input[type="number"]:focus,input[type="text"]:focus{
 @media print{
   header,.tabs,#tab-pricer,#tab-settings,#tab-revision,
   .add-item-btn,.print-btn,.clear-btn,.del-btn,
-  .invoice-add-row,.profit-mode-row,.card-title{display:none!important;}
+  .invoice-add-row,.profit-mode-row,.card-title,.no-print{display:none!important;}
   body{background:#fff;color:#000;padding:0;}
   #tab-invoice{display:block!important;padding:20px;}
   .invoice-table th{color:#555;}
@@ -603,15 +603,15 @@ input[type="number"]:focus,input[type="text"]:focus{
     <div id="invoice-table-wrap" style="display:none;overflow-x:auto;">
       <table class="invoice-table">
         <thead>
-          <tr><th>Item</th><th>Qty</th><th>Unit ₹</th><th>Total ₹</th><th>Profit ₹</th><th></th></tr>
+          <tr><th>Item</th><th>Qty</th><th>Unit ₹</th><th>Total ₹</th><th class="no-print">Profit ₹</th><th></th></tr>
         </thead>
         <tbody id="invoice-tbody"></tbody>
       </table>
       <div class="invoice-totals">
-        <div class="total-row"><span class="tl">Total Cost</span><span class="tv" id="inv-total-cost">₹0.00</span></div>
-        <div class="total-row"><span class="tl">Total Revenue</span><span class="tv" id="inv-total-revenue">₹0.00</span></div>
+        <div class="total-row no-print"><span class="tl">Total Cost</span><span class="tv" id="inv-total-cost">₹0.00</span></div>
+        <div class="total-row no-print"><span class="tl">Total Revenue</span><span class="tv" id="inv-total-revenue">₹0.00</span></div>
         <div class="total-row grand"><span class="tl">Grand Total</span><span class="tv" id="inv-grand-total">₹0.00</span></div>
-        <div class="profit-summary">
+        <div class="profit-summary no-print">
           <div class="ps-pill"><div class="ps-val" id="inv-total-profit">₹0</div><div class="ps-label">Total Profit</div></div>
           <div class="ps-pill"><div class="ps-val" id="inv-avg-margin">0%</div><div class="ps-label">Avg Margin</div></div>
           <div class="ps-pill"><div class="ps-val" id="inv-item-count">0</div><div class="ps-label">Items</div></div>
@@ -885,8 +885,8 @@ function renderInvoice(){
       <td style="font-family:'Space Mono',monospace;">${item.qty}</td>
       <td style="font-family:'Space Mono',monospace;">${fmt(item.sp)}</td>
       <td style="font-family:'Space Mono',monospace;">${fmt(item.lineTotal)}</td>
-      <td style="font-family:'Space Mono',monospace;color:var(--green)">${fmt(item.lineProfit)}</td>
-      <td><button class="del-btn" onclick="removeItem(${item.id})">✕</button></td>
+      <td class="no-print" style="font-family:'Space Mono',monospace;color:var(--green)">${fmt(item.lineProfit)}</td>
+      <td class="no-print"><button class="del-btn" onclick="removeItem(${item.id})">✕</button></td>
     </tr>`).join('');
   const totalCost=invoiceItems.reduce((s,i)=>s+i.lineCost,0);
   const totalRevenue=invoiceItems.reduce((s,i)=>s+i.lineTotal,0);

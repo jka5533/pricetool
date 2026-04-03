@@ -463,6 +463,7 @@ input[type="number"]:focus,input[type="text"]:focus{
   <button class="tab-btn active" onclick="switchTab('pricer',this)">Pricer</button>
   <button class="tab-btn" onclick="switchTab('invoice',this)">Invoice</button>
   <button class="tab-btn" onclick="switchTab('revision',this)">Revision</button>
+  <button class="tab-btn" onclick="switchTab('suggest',this)">💡 Suggest</button>
   <button class="tab-btn" onclick="switchTab('settings',this)">Settings</button>
 </div>
 
@@ -620,6 +621,161 @@ input[type="number"]:focus,input[type="text"]:focus{
     </div>
     <button class="print-btn" onclick="window.print()" id="print-btn" style="display:none;">🖨 Print / Save as PDF</button>
     <button class="clear-btn" onclick="clearInvoice()" id="clear-inv-btn" style="display:none;">🗑 Clear All Items</button>
+  </div>
+</div>
+
+<!-- ═══ TAB: SUGGEST ═══ -->
+<div class="tab-content" id="tab-suggest">
+  <div class="card">
+    <div class="card-title"><div class="ct-icon">💡</div>Sales % Suggester</div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:14px;line-height:1.6;">
+      Enter your purchase details below. We'll calculate what <strong style="color:var(--accent);">sales discount %</strong> you can offer while still making a profit in each mode — and what <strong style="color:var(--accent);">selling price</strong> to quote.
+    </div>
+    <div class="qty-row">
+      <div class="field">
+        <label>MRP / List Price ₹</label>
+        <div class="input-wrap has-prefix">
+          <span class="input-prefix">₹</span>
+          <input type="number" id="sug-mrp" placeholder="e.g. 100" oninput="calcSuggest()" min="0" step="0.01"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Quantity</label>
+        <div class="input-wrap">
+          <input type="number" id="sug-qty" placeholder="1" value="1" oninput="calcSuggest()" min="1" step="1"/>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Purchase Discount % (you get from supplier)</label>
+      <div class="input-wrap has-suffix">
+        <input type="number" id="sug-pdisc" placeholder="e.g. 65" oninput="calcSuggest()" min="0" max="100" step="0.1"/>
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+
+    <!-- Cost breakdown mini display -->
+    <div id="sug-cost-box" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-top:4px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Your Purchase Price</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--text);" id="sug-purchase-price">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;">
+        <span style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">True Cost (with overhead)</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);" id="sug-true-cost">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="sug-results" style="display:none;">
+
+    <div class="card" style="border-color:var(--green-border);">
+      <div class="card-title"><div class="ct-icon">🟢</div>Safe Mode · <span style="color:var(--green);" id="sug-safe-profit-pct"></span> profit</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:100px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Sell At Price</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--green);" id="sug-safe-sell">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Max Sales Disc %</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--text);" id="sug-safe-disc">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Profit / unit</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--green);" id="sug-safe-profit">—</div>
+        </div>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--rs);padding:10px;border:1px solid var(--border);">
+        <div class="result-row"><span class="result-label">Total Revenue (×qty)</span><span class="result-value green" id="sug-safe-total">—</span></div>
+        <div class="result-row" style="border:none;"><span class="result-label">Total Profit (×qty)</span><span class="result-value green" id="sug-safe-tprofit">—</span></div>
+      </div>
+      <div id="sug-safe-disc-range" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card" style="border-color:var(--yellow-border);">
+      <div class="card-title"><div class="ct-icon">🟡</div>Competitive Mode · <span style="color:var(--yellow);" id="sug-comp-profit-pct"></span> profit</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:100px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Sell At Price</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--yellow);" id="sug-comp-sell">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Max Sales Disc %</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--text);" id="sug-comp-disc">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Profit / unit</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--yellow);" id="sug-comp-profit">—</div>
+        </div>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--rs);padding:10px;border:1px solid var(--border);">
+        <div class="result-row"><span class="result-label">Total Revenue (×qty)</span><span class="result-value yellow" id="sug-comp-total">—</span></div>
+        <div class="result-row" style="border:none;"><span class="result-label">Total Profit (×qty)</span><span class="result-value yellow" id="sug-comp-tprofit">—</span></div>
+      </div>
+      <div id="sug-comp-disc-range" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card" style="border-color:var(--red-border);">
+      <div class="card-title"><div class="ct-icon">🔴</div>Minimum / Floor · <span style="color:var(--red);" id="sug-min-profit-pct"></span> profit</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:100px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Sell At Price</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--red);" id="sug-min-sell">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Max Sales Disc %</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--text);" id="sug-min-disc">—</div>
+        </div>
+        <div style="flex:1;min-width:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Profit / unit</div>
+          <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--red);" id="sug-min-profit">—</div>
+        </div>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--rs);padding:10px;border:1px solid var(--border);">
+        <div class="result-row"><span class="result-label">Total Revenue (×qty)</span><span class="result-value red" id="sug-min-total">—</span></div>
+        <div class="result-row" style="border:none;"><span class="result-label">Total Profit (×qty)</span><span class="result-value red" id="sug-min-tprofit">—</span></div>
+      </div>
+      <div id="sug-min-disc-range" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Discount range summary bar -->
+    <div class="card">
+      <div class="card-title"><div class="ct-icon">📊</div>Discount Range Summary</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">The safe discount range you can offer customers on MRP:</div>
+      <div id="sug-range-bar-wrap" style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:10px;color:var(--red);font-weight:700;" id="sug-bar-min-label">Floor</span>
+          <span style="font-size:10px;color:var(--green);font-weight:700;" id="sug-bar-safe-label">Safe Max</span>
+        </div>
+        <div style="height:10px;background:var(--bg3);border-radius:20px;overflow:hidden;border:1px solid var(--border);position:relative;">
+          <div id="sug-range-bar" style="height:100%;border-radius:20px;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));width:0%;transition:width 0.5s;"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="text-align:center;padding:10px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--rs);">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:4px;">🟢 Safe</div>
+          <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--green);" id="sug-sum-safe">—</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--rs);">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:4px;">🟡 Competitive</div>
+          <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--yellow);" id="sug-sum-comp">—</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--rs);">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-bottom:4px;">🔴 Floor</div>
+          <div style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--red);" id="sug-sum-min">—</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:var(--rs);">
+        <div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">💡 Recommendation</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;" id="sug-recommendation">—</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="sug-empty" class="card">
+    <div class="empty-state"><div class="icon">💡</div>Enter MRP, quantity & purchase discount above to get suggestions</div>
   </div>
 </div>
 
@@ -924,7 +1080,104 @@ function calcRevision(){
   document.getElementById('rev-old-safe').textContent=fmt(computeSellPrice(trueCostOld,s.safe));
 }
 
-function saveSettings(){calculate();calcRevision();calcInvoicePreview();}
+function calcSuggest(){
+  const s=getSettings();
+  const mrp=parseFloat(document.getElementById('sug-mrp').value);
+  const pdisc=parseFloat(document.getElementById('sug-pdisc').value)||0;
+  const qty=parseInt(document.getElementById('sug-qty').value)||1;
+
+  const empty=document.getElementById('sug-empty');
+  const results=document.getElementById('sug-results');
+  const costBox=document.getElementById('sug-cost-box');
+
+  if(!mrp||mrp<=0){
+    results.style.display='none';
+    empty.style.display='block';
+    costBox.style.display='none';
+    return;
+  }
+
+  // Your purchase price after supplier discount
+  const purchasePrice=mrp*(1-pdisc/100);
+  // True cost = purchase price factoring in gst loss (if without bill) + overhead
+  const trueCost=computeTrueCost(mrp,pdisc,s);
+
+  document.getElementById('sug-purchase-price').textContent=fmt(purchasePrice);
+  document.getElementById('sug-true-cost').textContent=fmt(trueCost);
+  costBox.style.display='block';
+
+  const modes=[
+    {key:'safe',   profitPct:s.safe,        color:'green',  label:'Safe'},
+    {key:'comp',   profitPct:s.competitive, color:'yellow', label:'Competitive'},
+    {key:'min',    profitPct:s.minimum,     color:'red',    label:'Minimum'},
+  ];
+
+  let discVals=[];
+
+  modes.forEach(m=>{
+    // Selling price required = trueCost * (1 + profitPct/100)
+    const sellPrice=trueCost*(1+m.profitPct/100);
+    // Sales discount on MRP = ((MRP - sellPrice) / MRP) * 100
+    const salesDisc=((mrp-sellPrice)/mrp)*100;
+    const profitUnit=sellPrice-trueCost;
+    const totalRev=sellPrice*qty;
+    const totalProfit=profitUnit*qty;
+
+    document.getElementById(`sug-${m.key}-profit-pct`).textContent=m.profitPct+'%';
+    document.getElementById(`sug-${m.key}-sell`).textContent=fmt(sellPrice);
+    document.getElementById(`sug-${m.key}-profit`).textContent=fmt(profitUnit);
+    document.getElementById(`sug-${m.key}-total`).textContent=fmt(totalRev);
+    document.getElementById(`sug-${m.key}-tprofit`).textContent=fmt(totalProfit);
+
+    if(salesDisc>=0){
+      document.getElementById(`sug-${m.key}-disc`).textContent=salesDisc.toFixed(1)+'%';
+      // Friendly contextual tip
+      const rangeEl=document.getElementById(`sug-${m.key}-disc-range`);
+      rangeEl.innerHTML=`<div style="background:var(--bg3);border-radius:var(--rs);padding:8px 12px;border:1px solid var(--border);font-size:11px;color:var(--text3);">
+        ℹ️ You can offer up to <strong style="color:var(--${m.color});">${salesDisc.toFixed(1)}%</strong> discount on MRP ₹${mrp} and still maintain <strong style="color:var(--${m.color});">${m.profitPct}%</strong> profit margin.
+      </div>`;
+    } else {
+      document.getElementById(`sug-${m.key}-disc`).textContent='N/A';
+      const rangeEl=document.getElementById(`sug-${m.key}-disc-range`);
+      rangeEl.innerHTML=`<div style="background:var(--red-bg);border-radius:var(--rs);padding:8px 12px;border:1px solid var(--red-border);font-size:11px;color:var(--red);">
+        ⚠️ Selling even at full MRP doesn't give ${m.profitPct}% profit. Sell ABOVE MRP or renegotiate purchase.
+      </div>`;
+    }
+
+    discVals.push({key:m.key,disc:salesDisc,label:m.label,color:m.color});
+    document.getElementById(`sug-sum-${m.key}`).textContent=salesDisc>=0?salesDisc.toFixed(1)+'%':'N/A';
+  });
+
+  // Range bar — use safe disc as max width reference
+  const safeDisc=discVals[0].disc;
+  const minDisc=discVals[2].disc;
+  const barWidth=Math.min(Math.max(safeDisc,0),100);
+  document.getElementById('sug-range-bar').style.width=barWidth+'%';
+  document.getElementById('sug-bar-safe-label').textContent='Safe: '+(safeDisc>=0?safeDisc.toFixed(1)+'%':'N/A');
+  document.getElementById('sug-bar-min-label').textContent='Floor: '+(minDisc>=0?minDisc.toFixed(1)+'%':'N/A');
+
+  // Recommendation text
+  const compDisc=discVals[1].disc;
+  let rec='';
+  if(safeDisc>=0&&compDisc>=0&&minDisc>=0){
+    rec=`For most customers, offer <strong style="color:var(--yellow);">${compDisc.toFixed(1)}%</strong> discount (Competitive). 
+    Go up to <strong style="color:var(--green);">${safeDisc.toFixed(1)}%</strong> only for bulk or loyal customers. 
+    Never go below <strong style="color:var(--red);">${minDisc.toFixed(1)}%</strong> — that's your floor.`;
+  } else if(compDisc>=0){
+    rec=`Stick to max <strong style="color:var(--yellow);">${compDisc.toFixed(1)}%</strong> discount. Safe mode not achievable at this MRP.`;
+  } else if(minDisc>=0){
+    rec=`Very tight margin. Maximum safe discount is <strong style="color:var(--red);">${minDisc.toFixed(1)}%</strong> — this is your absolute floor.`;
+  } else {
+    rec=`⚠️ Your purchase cost is too high relative to MRP. Even at full MRP you won't cover overheads. Consider renegotiating or raising MRP.`;
+  }
+  document.getElementById('sug-recommendation').innerHTML=rec;
+
+  empty.style.display='none';
+  results.style.display='block';
+}
+
+function saveSettings(){calculate();calcRevision();calcInvoicePreview();calcSuggest();}
+
 calculate();
 </script>
 </body>
